@@ -4,7 +4,7 @@
  * @brief       Fenêtre principale du programme
  *
  * @author      N.Jarnoux
- * @author      L. Guitton, F. Philippeau
+ * @author      L. Guitton et F. Philippeau
  * @author      STS IRIS, Lycée Nicolas APPERT, ORVAULT (FRANCE)
  * @since       18/02/14
  * @version     1.0

@@ -15,7 +15,7 @@
  *
  * Fabrication  OpenOrganigram.pro
  *
- * @todo        A completer avec les fonction manquante... J'attend mes collègues
+ * @todo        A completer avec les fonctions manquantes... J'attend mes collègues
  *
  * @bug         03/03/14 - Docks qui apparaissent trop grand
  */

@@ -1,4 +1,5 @@
 #include "ConnexionHTTP.h"
+#include <QDataStream>
 
 ConnexionHTTP::ConnexionHTTP(QTcpSocket *socket, QObject *parent) :
 	QObject(parent),

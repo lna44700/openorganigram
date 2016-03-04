@@ -20,7 +20,7 @@
    <string>Saisie de nom</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="ressources.qrc">
+   <iconset>
     <normaloff>:/Icons/App/new.png</normaloff>:/Icons/App/new.png</iconset>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
@@ -50,9 +50,7 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="ressources.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>

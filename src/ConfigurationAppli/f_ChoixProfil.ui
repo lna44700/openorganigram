@@ -68,7 +68,7 @@
   <widget class="QComboBox" name="Cb_Bx_Profil">
    <property name="geometry">
     <rect>
-     <x>140</x>
+     <x>110</x>
      <y>20</y>
      <width>160</width>
      <height>25</height>

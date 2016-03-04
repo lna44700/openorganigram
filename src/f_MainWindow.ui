@@ -38,7 +38,7 @@
      <x>0</x>
      <y>0</y>
      <width>737</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFichier">
@@ -88,8 +88,26 @@
     <property name="title">
      <string>Options</string>
     </property>
+    <widget class="QMenu" name="menuGestion_des_profils">
+     <property name="toolTipDuration">
+      <number>0</number>
+     </property>
+     <property name="title">
+      <string>Gestion des profils</string>
+     </property>
+     <property name="icon">
+      <iconset resource="ressources.qrc">
+       <normaloff>:/Images/App/gerer-utilisateurs-32.png</normaloff>:/Images/App/gerer-utilisateurs-32.png</iconset>
+     </property>
+     <addaction name="actionCreer_profil"/>
+     <addaction name="actionChanger_profil"/>
+     <addaction name="actionModifier_profil"/>
+     <addaction name="actionSupprimer_profil"/>
+    </widget>
     <addaction name="separator"/>
     <addaction name="actionInterpreteur"/>
+    <addaction name="actionConfiguration_Application"/>
+    <addaction name="menuGestion_des_profils"/>
    </widget>
    <addaction name="menuFichier"/>
    <addaction name="menuEdition"/>
@@ -529,6 +547,51 @@
   <action name="actionGestion_des_composants_I2C">
    <property name="text">
     <string>Gestion des composants I2C</string>
+   </property>
+  </action>
+  <action name="actionConfiguration_Application">
+   <property name="icon">
+    <iconset resource="ressources.qrc">
+     <normaloff>:/Images/App/configuration.png</normaloff>:/Images/App/configuration.png</iconset>
+   </property>
+   <property name="text">
+    <string>Configuration</string>
+   </property>
+  </action>
+  <action name="actionCreer_profil">
+   <property name="icon">
+    <iconset resource="ressources.qrc">
+     <normaloff>:/Images/App/ajouter-utilisateur-32.png</normaloff>:/Images/App/ajouter-utilisateur-32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Créer profil</string>
+   </property>
+  </action>
+  <action name="actionModifier_profil">
+   <property name="icon">
+    <iconset resource="ressources.qrc">
+     <normaloff>:/Images/App/modifier-utilisateur-32.png</normaloff>:/Images/App/modifier-utilisateur-32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Modifier un profil</string>
+   </property>
+  </action>
+  <action name="actionSupprimer_profil">
+   <property name="icon">
+    <iconset resource="ressources.qrc">
+     <normaloff>:/Images/App/supprimer-utilisateur-32.png</normaloff>:/Images/App/supprimer-utilisateur-32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Supprimer un profil</string>
+   </property>
+  </action>
+  <action name="actionChanger_profil">
+   <property name="icon">
+    <iconset resource="ressources.qrc">
+     <normaloff>:/Images/App/changer-utilisateurs-32.png</normaloff>:/Images/App/changer-utilisateurs-32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Changer de profil</string>
    </property>
   </action>
  </widget>

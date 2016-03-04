@@ -44,5 +44,11 @@
         <file>Images/Icones/clickyes.bmp</file>
         <file>Images/App/load.gif</file>
         <file>Images/App/actualier.png</file>
+        <file>Images/App/configuration.png</file>
+        <file>Images/App/ajouter-utilisateur-32.png</file>
+        <file>Images/App/gerer-utilisateurs-32.png</file>
+        <file>Images/App/modifier-utilisateur-32.png</file>
+        <file>Images/App/supprimer-utilisateur-32.png</file>
+        <file>Images/App/changer-utilisateurs-32.png</file>
     </qresource>
 </RCC>

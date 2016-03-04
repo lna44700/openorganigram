@@ -69,10 +69,6 @@ f_MainWindow::f_MainWindow(QWidget *    pParent) :
 	ServeurWeb              (),
     ui                      (new Ui::f_MainWindow)
 {
-    QSettings   Utilisateur ("C:\\Users\\Jonathan\\Documents\\Projet\\openorganigram\\Utilisateur.ini", QSettings::IniFormat) ;
-    QStringList ListeProfil ;
-
-    ListeProfil = Utilisateur.childGroups() ;
 
     // Initialisation générale
     this->ui->setupUi(this) ;
@@ -98,18 +94,6 @@ f_MainWindow::f_MainWindow(QWidget *    pParent) :
     this->EtatProjetenCours.Etat.ModuleCharge = 0;
     this->EtatProjetenCours.sCheminVersProjet = "";
 
-    //Vérification si profil par défaut
-    for (register int i = 0 ; i < ListeProfil.size() ; i++)
-    {
-        Utilisateur.beginGroup(ListeProfil[i]) ;
-        if (Utilisateur.value("/ProfilDefaut") == "1")
-        {
-            ProfilparDefaut = ListeProfil[i] ;
-        }
-        Utilisateur.endGroup() ;
-    }
-
-    //QMessageBox::information(this, "Bonjour !", "Vous êtes actuellement connecté en tant que : " + ProfilparDefaut) ;
 }
 
 /**
@@ -1032,6 +1016,8 @@ void f_MainWindow::OuvrirFenetreNouveauProfil()
 void f_MainWindow::OuvrirFenetreChoisirProfil()
 {
     f_ChoixProfil    f_ChoisirProfil  (this) ;
+    QWidget::connect(&f_ChoisirProfil, SIGNAL(EnvoieProfil(QString)),
+                     this, SLOT(on_envoieProfil(QString)));
 
     f_ChoisirProfil.exec() ;
 }
@@ -1164,7 +1150,7 @@ void f_MainWindow::on_actionQuitter_triggered()
 * @see      OuvrirFenetreConfig()
 */
 
-void f_MainWindow::on_actionConfiguration_triggered()
+void f_MainWindow::on_actionConfiguration_Application_triggered()
 {
     this->OuvrirFenetreConfig();
 }
@@ -1174,7 +1160,7 @@ void f_MainWindow::on_actionConfiguration_triggered()
 * @brief    f_MainWindow::on_actionNouveauProfil_triggered()
 * @see      OuvrirFenetreProfil()
 */
-void f_MainWindow::on_actionNouveauProfil_triggered()
+void f_MainWindow::on_actionCreer_profil_triggered()
 {
     this->OuvrirFenetreNouveauProfil();
 }
@@ -1184,7 +1170,7 @@ void f_MainWindow::on_actionNouveauProfil_triggered()
  *
  * @brief f_MainWindow::on_actionChoisirProfil_triggered
  */
-void f_MainWindow::on_actionChoisirProfil_triggered()
+void f_MainWindow::on_actionChanger_profil_triggered()
 {
     this->OuvrirFenetreChoisirProfil() ;
 }
@@ -1194,7 +1180,7 @@ void f_MainWindow::on_actionChoisirProfil_triggered()
  *
  * @brief f_MainWindow::on_actionSupprimerProfil_triggered
  */
-void f_MainWindow::on_actionSupprimerProfil_triggered()
+void f_MainWindow::on_actionSupprimer_profil_triggered()
 {
     this->OuvrirFenetreSupprimerProfil() ;
 }
@@ -1204,7 +1190,7 @@ void f_MainWindow::on_actionSupprimerProfil_triggered()
  *
  * @brief f_MainWindow::on_actionModifierProfil_triggered
  */
-void f_MainWindow::on_actionModifierProfil_triggered()
+void f_MainWindow::on_actionModifier_profil_triggered()
 {
     this->OuvrirFenetreModifierProfil() ;
 }
@@ -1547,7 +1533,7 @@ void f_MainWindow::slot_FinInterpretationIniOuvrirProjet(InterpreteurFichierIni*
 }
 
 /**
- * Demand ede demarrage du serveur web
+ * Demande de demarrage du serveur web
  * @brief f_MainWindow::on_actionServeur_Web_toggled
  * @param arg1
  */
@@ -1556,9 +1542,6 @@ void f_MainWindow::on_actionServeur_Web_toggled(bool arg1)
     if(arg1)
     {
 		ServeurWeb.start();
-    }
-    else
-    {
     }
 }
 
@@ -1572,3 +1555,32 @@ void f_MainWindow::on_actionGestion_des_composants_I2C_triggered()
     f_ConfigI2C ConfigI2C(this->pArduino, this);
     ConfigI2C.exec();
 }
+
+void f_MainWindow::on_envoieProfil(QString ProfilActif)
+{
+    this->ProfilActif = ProfilActif ;
+    this->show() ;
+    if(this->ProfilActif == "Eleve")
+    {
+        ui->actionInterpreteur->setEnabled(false) ;
+        ui->actionGestionMem->setEnabled(false) ;
+        ui->actionGestion_des_composants_I2C->setEnabled(false) ;
+        ui->actionRedemarrer_la_maquette->setEnabled(false) ;
+        ui->actionCreer_profil->setEnabled(false) ;
+        ui->actionModifier_profil->setEnabled(false) ;
+        ui->actionSupprimer_profil->setEnabled(false) ;
+        ui->actionConfiguration_Application->setEnabled(false) ;
+    }
+    if(this->ProfilActif == "Professeur")
+    {
+        ui->actionInterpreteur->setEnabled(true) ;
+        ui->actionGestionMem->setEnabled(true) ;
+        ui->actionGestion_des_composants_I2C->setEnabled(true) ;
+        ui->actionRedemarrer_la_maquette->setEnabled(true) ;
+        ui->actionCreer_profil->setEnabled(true) ;
+        ui->actionModifier_profil->setEnabled(true) ;
+        ui->actionSupprimer_profil->setEnabled(true) ;
+        ui->actionConfiguration_Application->setEnabled(true) ;
+    }
+}
+

@@ -34,17 +34,32 @@ f_ChoixProfil::f_ChoixProfil(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::f_ChoixProfil)
 {
-    QSettings   Utilisateur ("C:\\Users\\Jonathan\\Documents\\Projet\\openorganigram\\Utilisateur.ini", QSettings::IniFormat) ;
-    QStringList ListeProfil ;
+    QSettings   Profils ("Profils.ini", QSettings::IniFormat) ;
+    QString  NumProfil ;
+    QVariant Profil ;
 
     ui->setupUi(this) ;
+
+    ui->LE_MdP->setVisible(false) ;
+    ui->Lb_MdP->setVisible(false) ;
     this->setWindowTitle("Choix du profil utilisateur") ;
 
-    ui->LE_MdP->setEchoMode(QLineEdit::Password) ;
-    ui->Cb_Bx_Profil->setToolTip("Pour sélectionner le profil Eleve, vous pouvez ne pas rentrer son mot de passe.") ;
+    int i =0 ;
+    do
+    {
 
-    ListeProfil = Utilisateur.childGroups() ;
-    ui->Cb_Bx_Profil->addItems(ListeProfil) ;
+        NumProfil = "Profils/Profilid" + QString::number( i ) ;
+        Profil = Profils.value( NumProfil, "Inconnu" ) ;
+
+        if( Profil != "Inconnu" )
+        {
+            ui->Cb_Bx_Profil->addItem( Profil.toString() ) ;
+        }
+        i++ ;
+        this->NombreUtilisateurs = i-1 ;
+    }while( Profil != "Inconnu" ) ;
+
+
 }
 
 
@@ -64,7 +79,7 @@ f_ChoixProfil::~f_ChoixProfil()
 */
 void f_ChoixProfil::on_actionValider_accepted()
 {
-    QSettings   Utilisateur ("C:\\Users\\Jonathan\\Documents\\Projet\\openorganigram\\Utilisateur.ini", QSettings::IniFormat) ;
+/*    QSettings   Utilisateur ("C:\\Users\\Gaetan\\Documents\\PROJET\\openorganigram\\Profils.ini", QSettings::IniFormat) ;
     QCryptographicHash  HashMDP (QCryptographicHash::Md5) ;
     QByteArray          ArrayHashMDP ;
 
@@ -85,6 +100,51 @@ void f_ChoixProfil::on_actionValider_accepted()
         emit accept() ;
         f_ChoixProfil::close() ;
     }
+
+*/
+    QSettings   Profils ("Profils.ini", QSettings::IniFormat) ;
+    QSettings   Mdps ("Profils.ini", QSettings::IniFormat) ;
+    QString  NumProfil ;
+    QVariant ProfilSelectionne ;
+    QVariant Profil ;
+    QString NumMdp ;
+    QVariant MdpEntre ;
+    QVariant Mdp ;
+
+    ProfilSelectionne = ui->Cb_Bx_Profil->currentText() ;
+    MdpEntre = ui->LE_MdP->text() ;
+
+    if( ProfilSelectionne == "Eleve")
+    {
+        ProfilActif = ui->Cb_Bx_Profil->currentText() ;
+    }
+
+    int i = 0 ;
+    do
+    {
+
+        NumProfil = "Profils/Profilid" + QString::number( i ) ;
+        Profil = Profils.value( NumProfil, "Inconnu" ) ;
+        NumMdp = "Mdp/mdpid" + QString::number( i ) ;
+        Mdp = Mdps.value ( NumMdp, "") ;
+
+        if( Mdp == MdpEntre )
+        {
+            this->ProfilActif = ui->Cb_Bx_Profil->currentText() ;
+
+            QMessageBox::information(this, "Changement de profil.", "Vous êtes maintenant connecté en tant que : " + this->ProfilActif) ;
+            emit accept() ;
+            f_ChoixProfil::close() ;
+        }
+        i++ ;
+    }while( Mdp != MdpEntre && i < NombreUtilisateurs ) ;
+    if( Mdp != MdpEntre )
+    {
+        QMessageBox::critical(this, "Erreur !", "Mot de passe incorrect.") ;
+        ui->LE_MdP->clear() ;
+        ui->Lb_MdP->setStyleSheet("border: 2px solid red") ;
+    }
+
 }
 
 
@@ -105,4 +165,27 @@ void f_ChoixProfil::on_actionValider_rejected()
 QString f_ChoixProfil::Get_ProfilActif()
 {
     return (this->ProfilActif) ;
+}
+
+
+void f_ChoixProfil::on_Cb_Bx_Profil_currentTextChanged(const QString &arg1)
+{
+    if (arg1 == "Professeur")
+    {
+        ui->LE_MdP->setVisible(true) ;
+        ui->Lb_MdP->setVisible(true) ;
+    }
+    else
+    {
+        ui->LE_MdP->setVisible(false) ;
+        ui->Lb_MdP->setVisible(false) ;
+    }
+
+}
+
+
+void f_ChoixProfil::closeEvent(QCloseEvent *CloseEvent)
+{
+    emit(EnvoieProfil(ProfilActif));
+    CloseEvent->accept();
 }

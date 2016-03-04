@@ -52,7 +52,7 @@ class f_MainWindow : public QMainWindow
     private:
         //===== ATTRIBUTS  PRIVES =====
         QString                 MotDePass ;                 //Mot de passe du compte admin (je suppose...)
-        QString                 ProfilparDefaut ;           //Identifie le profil par défaut de l'appli
+        QString                 ProfilActif ;               //Identifie le profil actif de l'appli
         QList<ModuleManager *>  Lst_pManagers ;             //Liste des managers de modules
         int                     IndiceModuleCourant ;       //Indice dans la liste du module actuellement chargé
         DescProjet              EtatProjetenCours ;         //Représente l'état du projet (ouvert, enregistré...)
@@ -91,11 +91,11 @@ class f_MainWindow : public QMainWindow
         void on_actionEnregistrer_sous_triggered() ;                //Demande d'enregistrer sous
         void on_actionFermer_triggered() ;                          //Demande de fermeture du projet
         void on_actionQuitter_triggered() ;                         //Demande de fermeture de l'app
-        void on_actionConfiguration_triggered() ;                   //Demande d'affichage de la configuration
-        void on_actionNouveauProfil_triggered() ;                   //Demande de création de profil
-        void on_actionChoisirProfil_triggered();                    //Demande d'affichage de choix du profil actif
-        void on_actionSupprimerProfil_triggered();                  //Demande d'affichage de suppression de profil
-        void on_actionModifierProfil_triggered();                   //Demande d'affichage de modification de profil
+        void on_actionConfiguration_Application_triggered() ;       //Demande d'affichage de la configuration
+        void on_actionCreer_profil_triggered() ;                    //Demande de création de profil
+        void on_actionModifier_profil_triggered() ;                 //Demande d'affichage de modification de profil
+        void on_actionSupprimer_profil_triggered() ;                //Demande d'affichage de suppression de profil
+        void on_actionChanger_profil_triggered() ;                  //Demande d'affichage de choix du profil actif
         void on_treeView_doubleClicked(const QModelIndex &index);   //Demande d'affichage d'une routine par double clic sur la liste
         void on_actionAgrandir_triggered();                         //Demande de zoom du dessin
         void on_actionRetrecir_triggered();                         //Demande de dézoom du dessin
@@ -108,12 +108,13 @@ class f_MainWindow : public QMainWindow
         void on_actionOuvrir_triggered();                           //Demande d'ouverture de projet
         void on_actionConvert_triggered();                          //Demande de compilation
         void on_actionGestionMem_triggered();                       //Ouvre la fneetre de gestion mémoire
-        void on_actionImporter_triggered();                         //DEmande de nouveau projet à partri d'un plan de câblage existant
+        void on_actionImporter_triggered();                         //Demande de nouveau projet à partri d'un plan de câblage existant
         void slot_FinInterpretationIniImportConfig(InterpreteurFichierIni *Interpreteur, bool Reussi);  //Fin d'interpretation du fichier ini pour l'importation
         void slot_FinInterpretationIniOuvrirProjet(InterpreteurFichierIni *Interpreteur, bool Reussi);  //Fin d'interpretation du fichier ini pour l'ouverture
-        void on_actionServeur_Web_toggled(bool arg1);               //DEmande de démarrage du seveur web
+        void on_actionServeur_Web_toggled(bool arg1);               //Demande de démarrage du seveur web
         void on_actionRedemarrer_la_maquette_triggered();
         void on_actionGestion_des_composants_I2C_triggered();
+        void on_envoieProfil(QString ProfilActif);
 };
 
 #endif // F_MAINWINDOW_H

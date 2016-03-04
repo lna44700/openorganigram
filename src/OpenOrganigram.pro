@@ -166,7 +166,8 @@ HEADERS  += f_MainWindow.h \
     Supervision/Switch.h \
     Supervision/Widgets/WidgetNO.h \
     Supervision/Widgets/WidgetAI.h \
-    Supervision/Widgets/WidgetMOT1.h
+    Supervision/Widgets/WidgetMOT1.h \
+    f_start.h
 
 FORMS    += f_MainWindow.ui \
     Interface/f_InterpreteurCommandes.ui \
@@ -193,7 +194,8 @@ FORMS    += f_MainWindow.ui \
     ConfigurationMaquette/f_ChoixInterface.ui \
     ConfigurationMaquette/f_ChoixModules.ui \
     ConfigurationMaquette/DefinirActionsEtTests/f_EditerActionTest.ui \
-    Supervision/f_AffichageFenetre.ui
+    Supervision/f_AffichageFenetre.ui \
+    f_start.ui
 
 
 RESOURCES += \

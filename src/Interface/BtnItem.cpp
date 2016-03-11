@@ -9,7 +9,7 @@
  * @version     1.0
  * @date        21/02/14
  *
- * Bouton pour inserer des éléments grpahiques d'organigramme. Ce bouton est hérité du QPushButton
+ * Bouton pour inserer des éléments graphiques d'organigramme. Ce bouton est hérité du QPushButton
  * classique pour une gestion plus poussée des événements et pour déclencher correctement le drag'n drop.
  *
  * Fabrication  OpenOrganigram.pro
@@ -79,6 +79,12 @@ BtnItem::BtnItem(TypeCommande Type, f_MainWindow* f_Principale, QWidget *   pare
     case BOUCLE:
         sNomFichier = "iconboucle.png" ;
         sTexte      = "Boucle" ;
+        break;
+
+    case EP:
+        sNomFichier = "iconparal.png" ;
+        sTexte      = "Exécution Parallèle" ;
+        break;
 
     default:
         break;

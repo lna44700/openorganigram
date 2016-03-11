@@ -4,13 +4,13 @@
  * @brief       Instruction de condition
  *
  * @author      N.Jarnoux
- * @author      STS IRIS, LycÃ©e Nicolas APPERT, ORVAULT (FRANCE)
+ * @author      STS IRIS, Lycee Nicolas APPERT, ORVAULT (FRANCE)
  * @since       17/03/14
  * @version     1.0
  * @date        17/03/14
  *
- * ReprÃ©sente une opÃ©ration sur une variable dans l'organigramme. Les opÃ©rations acceptÃ©es sont l'affectation,
- * l'incrementation, la dÃ©crÃ©mentation, l'addition et la soustraction.
+ * Represente une operation sur une variable dans l'organigramme. Les operations acceptees sont l'affectation,
+ * l'incrementation, la decrementation, l'addition et la soustraction.
  *
  * Fabrication  OpenOrganigram.pro
  *
@@ -49,7 +49,7 @@ Inst_Cond::Inst_Cond(unsigned int nId, Routine *pRoutine) :
  * Constructeur.
  *
  * @brief   Inst_Cond::Inst_Cond
- * @param   Dzscription Le descripteur de la condition
+ * @param   Description Le descripteur de la condition
  * @see     Instruction
  */
 Inst_Cond::Inst_Cond(DescCondition Description) :

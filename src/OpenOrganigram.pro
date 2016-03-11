@@ -91,7 +91,10 @@ SOURCES += main.cpp\
     Supervision/Switch.cpp \
     Supervision/Widgets/WidgetNO.cpp \
     Supervision/Widgets/WidgetAI.cpp \
-    Supervision/Widgets/WidgetMOT1.cpp
+    Supervision/Widgets/WidgetMOT1.cpp \
+    Vue/Item/Item_ExecPara.cpp \
+    Control/Inst/Inst_EP.cpp \
+    Control/ModInst/f_ModInst_EP.cpp
 
 
 HEADERS  += f_MainWindow.h \
@@ -167,7 +170,10 @@ HEADERS  += f_MainWindow.h \
     Supervision/Widgets/WidgetNO.h \
     Supervision/Widgets/WidgetAI.h \
     Supervision/Widgets/WidgetMOT1.h \
-    f_start.h
+    Vue/Item/Item_ExecPara.h \
+    Control/Inst/Inst_EP.h \
+    f_ModInst_EP.h \
+    Control/ModInst/f_ModInst_EP.h
 
 FORMS    += f_MainWindow.ui \
     Interface/f_InterpreteurCommandes.ui \
@@ -195,7 +201,7 @@ FORMS    += f_MainWindow.ui \
     ConfigurationMaquette/f_ChoixModules.ui \
     ConfigurationMaquette/DefinirActionsEtTests/f_EditerActionTest.ui \
     Supervision/f_AffichageFenetre.ui \
-    f_start.ui
+    Control/ModInst/f_ModInst_EP.ui
 
 
 RESOURCES += \

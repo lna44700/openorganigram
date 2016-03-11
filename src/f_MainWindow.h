@@ -58,7 +58,7 @@ class f_MainWindow : public QMainWindow
         DescProjet              EtatProjetenCours ;         //Représente l'état du projet (ouvert, enregistré...)
         QStandardItem *         pStIt_Projet ;              //Element de la liste déroulante de gestion de projet
         QStandardItem *         pStIt_ListeModules ;        //Idem
-        BtnItem *               pBt_ItemDock[7] ;           //7 boutons dockés sur le côté pour ajouter les items organigramme1
+        BtnItem *               pBt_ItemDock[8] ;           //8 boutons dockés sur le côté pour ajouter les items organigramme1
         Arduino *               pArduino ;                  //Connexion à l'arduino
         QLabel *                pEtatConnexion ;            //Label rendant compte de l'état de la connexion
 		ServeurHTTPThread       ServeurWeb;                 //Serveur web pour supervision
@@ -115,6 +115,8 @@ class f_MainWindow : public QMainWindow
         void on_actionRedemarrer_la_maquette_triggered();
         void on_actionGestion_des_composants_I2C_triggered();
         void on_envoieProfil(QString ProfilActif);
+        void on_actionDemarrerServeurWeb_triggered();
+        void on_actionArreterServeurWeb_triggered();
 };
 
 #endif // F_MAINWINDOW_H

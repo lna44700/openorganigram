@@ -86,6 +86,9 @@ INPUT(
 ./release\WidgetNO.o
 ./release\WidgetAI.o
 ./release\WidgetMOT1.o
+./release\Item_ExecPara.o
+./release\Inst_EP.o
+./release\f_ModInst_EP.o
 ./release\qrc_ressources.o
 ./release\qrc_Supervision.o
 ./release\moc_f_MainWindow.o
@@ -133,4 +136,5 @@ INPUT(
 ./release\moc_WidgetNO.o
 ./release\moc_WidgetAI.o
 ./release\moc_WidgetMOT1.o
+./release\moc_f_ModInst_EP.o
 );

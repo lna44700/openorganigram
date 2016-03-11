@@ -39,7 +39,8 @@ typedef enum
     ROUT    = 4,
     TEMPO   = 5,
     COM     = 6,
-    BOUCLE  = 7
+    BOUCLE  = 7,
+    EP      = 8
 } TypeCommande; //Type de commande possible dans l'organigramme
 
 typedef enum {
@@ -69,6 +70,11 @@ typedef struct {
 
     TestArduino     TestMat ;
 } DescCondition ;   //description de la condition sans la partie conception de l'objet
+
+typedef struct
+{
+    unsigned int nNombreDeBranches ;    //nombre de branches possibles pour l'execution parallele
+} DescEP ; //description de la l'execution parallele.
 
 typedef struct
 {
@@ -117,23 +123,6 @@ typedef struct {
     IdentifiantInst IdInst;     //L'identifiant de l'instruction à viser
     bool            Absolue;
 } LienCompil;   //Identifie un lien à faire avec une autre instruction dans la compilation
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 typedef enum {

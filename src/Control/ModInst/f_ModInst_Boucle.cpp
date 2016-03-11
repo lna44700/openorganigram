@@ -49,13 +49,13 @@ f_ModInst_Boucle::f_ModInst_Boucle(Inst_Boucle *pInstructionAModifier, QWidget *
         this->ui->RadioTQ->setChecked(true);
     }
 
-    //Si c'est un jusqu'à on check
+    //Si c'est un jusqu'à,R on check
     if(pInstructionAModifier->getTypeDeBoucle() == JUSQU_A)
     {
         this->ui->RadioJQ->setChecked(true);
     }
 
-    //On connect les signaux qui vont bien
+    //On connecte les signaux qui vont bien
     this->connect(this->pf_ModInst_Cond, SIGNAL(accepted()), this, SLOT(accept()));
     this->connect(this->pf_ModInst_Cond, SIGNAL(rejected()), this, SLOT(reject()));
 }

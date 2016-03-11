@@ -1,20 +1,20 @@
 //-------------------------------------------------------------------------------
 /**
  * @file        Item.cpp
- * @brief       Représentation d'un élément grpahique
+ * @brief       Représentation d'un élément graphique
  *
- * @author      N.Jarnoux
+ * @author      N.Jarnoux & L. Guitton
  * @author      STS IRIS, Lycée Nicolas APPERT, ORVAULT (FRANCE)
  * @since       21/02/14
  * @version     1.0
- * @date        21/02/14
+ * @date        11/03/2016
  *
  * Représente un élément graphique, cette classe sera dérivée en classe fille pour différencier tout les
  * types d'items.
  *
  * Fabrication  OpenOrganigram.pro
  *
- * @todo        Tout est à faire, la classe est codée au minimum syndicale pour tester d'autres fonctionnalités
+ * @todo        /
  *
  * @bug         /
  */
@@ -47,6 +47,7 @@
 #include "../Control/Inst/Inst_Rout.h"
 #include "../Control/Inst/Inst_Tempo.h"
 #include "../Control/Inst/Inst_Com.h"
+#include "../Control/Inst/Inst_EP.h"
 
 /**
  * Constructeur
@@ -329,6 +330,7 @@ void Item::mouseMoveEvent(QGraphicsSceneMouseEvent *  pEvent)
         Inst_Tempo* Tempo       (0);
         Inst_Com*   Commentaire (0);
         Inst_Boucle*  Boucle      (0);
+        Inst_EP* ExecutionParallele (0);
 
         //En fonction du type d'item, on met l'icone qui va bien à côté de la, on récupere le pointeur vers l'instruction et la description brute en chaine de caractère
         switch(this->getTypeInst())
@@ -373,6 +375,12 @@ void Item::mouseMoveEvent(QGraphicsSceneMouseEvent *  pEvent)
             sNomFichier = "iconboucle.png" ;
             Boucle      = static_cast<Inst_Boucle*>(this->pInstRepresentee);
             DescBrute   = Instruction::ConvertirVersChaine(Boucle->getDesc());
+            break;
+
+        case EP:
+            sNomFichier = "iconparal.png" ;
+            ExecutionParallele = static_cast<Inst_EP*>(this->pInstRepresentee) ;
+            DescBrute   =  Instruction::ConvertirVersChaine(ExecutionParallele->getDesc()) ;
             break;
 
         default:

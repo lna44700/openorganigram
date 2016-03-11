@@ -10,7 +10,7 @@
  * @date        25/02/14
  *
  * Gestionnaire d'un organigramme d'un module en particulier. Il gèrera l'exécution de cet
- * organigramme ainsi que lordonnancement dexs différente instructions à travers les routines.
+ * organigramme ainsi que lordonnancement des différentes instructions à travers les routines.
  *
  * Fabrication  OpenOrganigram.pro
  *

@@ -86,6 +86,9 @@ INPUT(
 ./debug\WidgetNO.o
 ./debug\WidgetAI.o
 ./debug\WidgetMOT1.o
+./debug\Item_ExecPara.o
+./debug\Inst_EP.o
+./debug\f_ModInst_EP.o
 ./debug\qrc_ressources.o
 ./debug\qrc_Supervision.o
 ./debug\moc_f_MainWindow.o
@@ -133,4 +136,5 @@ INPUT(
 ./debug\moc_WidgetNO.o
 ./debug\moc_WidgetAI.o
 ./debug\moc_WidgetMOT1.o
+./debug\moc_f_ModInst_EP.o
 );

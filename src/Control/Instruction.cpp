@@ -30,6 +30,7 @@
 #include "Inst/Inst_Ope.h"
 #include "Inst/Inst_Cond.h"
 #include "Inst/Inst_ES.h"
+#include "Inst/Inst_EP.h"
 #include "Inst/Inst_Rout.h"
 #include "Inst/Inst_Tempo.h"
 #include "Inst/Inst_Com.h"
@@ -104,6 +105,9 @@ Instruction * Instruction::NouvelleInst(TypeCommande Type, unsigned int nId, Rou
     case BOUCLE:
         pNouvelleInst = new Inst_Boucle(nId, pRoutine);
         break ;
+
+    case EP:
+        pNouvelleInst = new Inst_EP(nId, pRoutine) ;
     }
 
     return pNouvelleInst ;
@@ -251,6 +255,21 @@ QString Instruction::ConvertirVersChaine(DescTempo        Desc)
 }
 
 /**
+  Converti une description d'execution parallele en chaine de caractère
+ * @brief Instruction::ConvertirVersChaine
+ * @param Desc  La description
+ * @return La chaine de caractère
+ */
+QString Instruction::ConvertirVersChaine(DescEP        Desc)
+{
+    QString Retour;
+
+    Retour += QVariant(Desc.nNombreDeBranches).toString();
+
+    return Retour;
+}
+
+/**
  * Converti une chaine de caractère formatée vers une description
  * @brief Instruction::ConvertirVersDesc
  * @param Chaine    La chaine à traiter
@@ -318,6 +337,26 @@ void Instruction::ConvertirVersDesc(QString Chaine, DescES*           Desc)
             Desc->CommandeDemandee.sNomAction   = sNomAction;
             Desc->CommandeDemandee.sCommande    = sCommande;
             Desc->CommandeDemandee.bActive      = bActive;
+        }
+    }
+}
+
+/**
+ * Converti une chaine de caractère formatée vers une description
+ * @brief Instruction::ConvertirVersDesc
+ * @param Chaine    La chaine à traiter
+ * @param Desc      La description à fournir
+ */
+void Instruction::ConvertirVersDesc(QString Chaine, DescEP*            Desc)
+{
+    if(Desc != 0)
+    {
+        QStringList Liste   (Chaine.split("`"));
+        if(Liste.length() == 1)
+        {
+            unsigned int     nNombreDeBranche (Liste[0].toInt());
+
+            Desc->nNombreDeBranches = nNombreDeBranche;
         }
     }
 }

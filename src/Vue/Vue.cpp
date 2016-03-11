@@ -30,6 +30,7 @@
 #include "Item/Item_Cond.h"
 #include "Item/Item_DebFin.h"
 #include "Item/Item_ES.h"
+#include "Item/Item_ExecPara.h"
 #include "Item/Item_Ope.h"
 #include "Item/Item_Rout.h"
 #include "Item/Item_Tempo.h"
@@ -284,6 +285,9 @@ Item * Vue::newItem(Instruction *   pInst, Item *  pParent)
     case BOUCLE:
         pNewItem = new Item_Boucle(pInst, pParent) ;
         break ;
+
+    case EP:
+        pNewItem = new Item_ExecPara(pInst, pParent) ;
     }
 
     return pNewItem ;

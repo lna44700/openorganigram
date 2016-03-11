@@ -148,6 +148,10 @@
    <addaction name="separator"/>
    <addaction name="actionSV"/>
    <addaction name="actionConvert"/>
+   <addaction name="separator"/>
+   <addaction name="actionDemarrerServeurWeb"/>
+   <addaction name="actionArreterServeurWeb"/>
+   <addaction name="actionRafraichirConfigurationServeurWeb"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="DockBtn">
@@ -592,6 +596,51 @@
    </property>
    <property name="text">
     <string>Changer de profil</string>
+   </property>
+  </action>
+  <action name="actionDemarrerServeurWeb">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="ressources.qrc">
+     <normaloff>:/Images/App/webstart-icon.png</normaloff>:/Images/App/webstart-icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Demarrer Serveur Web</string>
+   </property>
+   <property name="toolTip">
+    <string>Demarrer Serveur Web</string>
+   </property>
+  </action>
+  <action name="actionArreterServeurWeb">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="ressources.qrc">
+     <normaloff>:/Images/App/webstop-icon.png</normaloff>:/Images/App/webstop-icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Arrêter Serveur Web</string>
+   </property>
+   <property name="toolTip">
+    <string>Arrêter Serveur Web</string>
+   </property>
+  </action>
+  <action name="actionRafraichirConfigurationServeurWeb">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="ressources.qrc">
+     <normaloff>:/Images/App/webrefresh-icon.png</normaloff>:/Images/App/webrefresh-icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Rafraîchir Configuration Serveur Web</string>
+   </property>
+   <property name="toolTip">
+    <string>Rafraîchir Configuration Serveur Web</string>
    </property>
   </action>
  </widget>

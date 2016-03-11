@@ -50,5 +50,9 @@
         <file>Images/App/modifier-utilisateur-32.png</file>
         <file>Images/App/supprimer-utilisateur-32.png</file>
         <file>Images/App/changer-utilisateurs-32.png</file>
+        <file>Images/App/webrefresh-icon.png</file>
+        <file>Images/App/webstop-icon.png</file>
+        <file>Images/App/webstart-icon.png</file>
+        <file>Images/Items/iconparal.png</file>
     </qresource>
 </RCC>

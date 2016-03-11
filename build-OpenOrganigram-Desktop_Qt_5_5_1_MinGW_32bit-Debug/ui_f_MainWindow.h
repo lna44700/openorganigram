@@ -63,6 +63,9 @@ public:
     QAction *actionModifier_profil;
     QAction *actionSupprimer_profil;
     QAction *actionChanger_profil;
+    QAction *actionDemarrerServeurWeb;
+    QAction *actionArreterServeurWeb;
+    QAction *actionRafraichirConfigurationServeurWeb;
     QWidget *centralWidget;
     QGridLayout *gridLayout_2;
     QMenuBar *menuBar;
@@ -237,6 +240,24 @@ public:
         QIcon icon18;
         icon18.addFile(QStringLiteral(":/Images/App/changer-utilisateurs-32.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionChanger_profil->setIcon(icon18);
+        actionDemarrerServeurWeb = new QAction(f_MainWindow);
+        actionDemarrerServeurWeb->setObjectName(QStringLiteral("actionDemarrerServeurWeb"));
+        actionDemarrerServeurWeb->setEnabled(false);
+        QIcon icon19;
+        icon19.addFile(QStringLiteral(":/Images/App/webstart-icon.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionDemarrerServeurWeb->setIcon(icon19);
+        actionArreterServeurWeb = new QAction(f_MainWindow);
+        actionArreterServeurWeb->setObjectName(QStringLiteral("actionArreterServeurWeb"));
+        actionArreterServeurWeb->setEnabled(false);
+        QIcon icon20;
+        icon20.addFile(QStringLiteral(":/Images/App/webstop-icon.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionArreterServeurWeb->setIcon(icon20);
+        actionRafraichirConfigurationServeurWeb = new QAction(f_MainWindow);
+        actionRafraichirConfigurationServeurWeb->setObjectName(QStringLiteral("actionRafraichirConfigurationServeurWeb"));
+        actionRafraichirConfigurationServeurWeb->setEnabled(false);
+        QIcon icon21;
+        icon21.addFile(QStringLiteral(":/Images/App/webrefresh-icon.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionRafraichirConfigurationServeurWeb->setIcon(icon21);
         centralWidget = new QWidget(f_MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Preferred);
@@ -265,9 +286,9 @@ public:
         menuGestion_des_profils = new QMenu(menuOptions);
         menuGestion_des_profils->setObjectName(QStringLiteral("menuGestion_des_profils"));
         menuGestion_des_profils->setToolTipDuration(0);
-        QIcon icon19;
-        icon19.addFile(QStringLiteral(":/Images/App/gerer-utilisateurs-32.png"), QSize(), QIcon::Normal, QIcon::Off);
-        menuGestion_des_profils->setIcon(icon19);
+        QIcon icon22;
+        icon22.addFile(QStringLiteral(":/Images/App/gerer-utilisateurs-32.png"), QSize(), QIcon::Normal, QIcon::Off);
+        menuGestion_des_profils->setIcon(icon22);
         f_MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(f_MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -395,6 +416,10 @@ public:
         mainToolBar->addSeparator();
         mainToolBar->addAction(actionSV);
         mainToolBar->addAction(actionConvert);
+        mainToolBar->addSeparator();
+        mainToolBar->addAction(actionDemarrerServeurWeb);
+        mainToolBar->addAction(actionArreterServeurWeb);
+        mainToolBar->addAction(actionRafraichirConfigurationServeurWeb);
 
         retranslateUi(f_MainWindow);
         QObject::connect(actionSV, SIGNAL(triggered(bool)), DockSV, SLOT(setVisible(bool)));
@@ -450,6 +475,18 @@ public:
         actionModifier_profil->setText(QApplication::translate("f_MainWindow", "Modifier un profil", 0));
         actionSupprimer_profil->setText(QApplication::translate("f_MainWindow", "Supprimer un profil", 0));
         actionChanger_profil->setText(QApplication::translate("f_MainWindow", "Changer de profil", 0));
+        actionDemarrerServeurWeb->setText(QApplication::translate("f_MainWindow", "Demarrer Serveur Web", 0));
+#ifndef QT_NO_TOOLTIP
+        actionDemarrerServeurWeb->setToolTip(QApplication::translate("f_MainWindow", "Demarrer Serveur Web", 0));
+#endif // QT_NO_TOOLTIP
+        actionArreterServeurWeb->setText(QApplication::translate("f_MainWindow", "Arr\303\252ter Serveur Web", 0));
+#ifndef QT_NO_TOOLTIP
+        actionArreterServeurWeb->setToolTip(QApplication::translate("f_MainWindow", "Arr\303\252ter Serveur Web", 0));
+#endif // QT_NO_TOOLTIP
+        actionRafraichirConfigurationServeurWeb->setText(QApplication::translate("f_MainWindow", "Rafra\303\256chir Configuration Serveur Web", 0));
+#ifndef QT_NO_TOOLTIP
+        actionRafraichirConfigurationServeurWeb->setToolTip(QApplication::translate("f_MainWindow", "Rafra\303\256chir Configuration Serveur Web", 0));
+#endif // QT_NO_TOOLTIP
         menuFichier->setTitle(QApplication::translate("f_MainWindow", "Fichier", 0));
         menuEdition->setTitle(QApplication::translate("f_MainWindow", "Organigrammes", 0));
         menuAide->setTitle(QApplication::translate("f_MainWindow", "Aide", 0));

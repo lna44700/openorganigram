@@ -31,6 +31,7 @@
 #include "Inst/Inst_Tempo.h"
 #include "Inst/Inst_Com.h"
 #include "Inst/Inst_Boucle.h"
+#include "Inst/Inst_EP.h"
 
 /**
  * Constructeur par défaut d'une routine
@@ -141,6 +142,11 @@ void Routine::AjouterInstruction(TypeCommande Type, unsigned int nIdPrecedent, b
     case BOUCLE:
         pNouvelleInst = new Inst_Boucle(nIdInst, this);
         break ;
+
+    case EP:
+        pNouvelleInst = new Inst_EP(nIdInst, this);
+        break ;
+
     default:
         break;
     }

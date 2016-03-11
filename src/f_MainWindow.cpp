@@ -94,6 +94,9 @@ f_MainWindow::f_MainWindow(QWidget *    pParent) :
     this->EtatProjetenCours.Etat.ModuleCharge = 0;
     this->EtatProjetenCours.sCheminVersProjet = "";
 
+    //Désactivation des actions
+    this->ActiverActions(false);
+
 }
 
 /**
@@ -196,15 +199,16 @@ void f_MainWindow::InitialiserBt_ItemDock()
     this->pBt_ItemDock[2] = new BtnItem  (BOUCLE, this)  ;
     this->pBt_ItemDock[3] = new BtnItem  (ES, this)    ;
     this->pBt_ItemDock[4] = new BtnItem  (ROUT, this)  ;
-    this->pBt_ItemDock[5] = new BtnItem  (TEMPO, this) ;
-    this->pBt_ItemDock[6] = new BtnItem  (COM, this)   ;
+    this->pBt_ItemDock[5] = new BtnItem  (EP, this);
+    this->pBt_ItemDock[6] = new BtnItem  (TEMPO, this) ;
+    this->pBt_ItemDock[7] = new BtnItem  (COM, this)   ;
 
     //Préparation du dock
     this->ui->DockBtn->setWidget(new QWidget) ;
     this->ui->DockBtn->widget()->setLayout(new QVBoxLayout) ;
 
     //Ajout des boutons dans le dock
-    for(register unsigned int i=0; i<7; i++)
+    for(register unsigned int i=0; i<8; i++)
     {
         this->ui->DockBtn->widget()->layout()->addWidget(pBt_ItemDock[i]) ;
     }
@@ -220,7 +224,7 @@ void f_MainWindow::InitialiserBt_ItemDock()
  */
 void f_MainWindow::ActiverBt_ItemDock(bool en)
 {
-    for(register unsigned int i=0; i<7; i++)
+    for(register unsigned int i=0; i<8; i++)
     {
         this->pBt_ItemDock[i]->setEnabled(en);
     }
@@ -237,8 +241,8 @@ void f_MainWindow::ActiverActions(bool bActive)
     this->ui->actionEnregistrer->setEnabled(bActive) ;
     this->ui->actionEnregistrer_sous->setEnabled(bActive) ;
     this->ui->actionFermer->setEnabled(bActive) ;
-    this->ui->actionConvert->setEnabled(bActive);
-
+    this->ui->actionConvert->setEnabled(bActive) ;
+    this->ui->actionDebug->setEnabled(bActive) ;
 
     if(this->EtatProjetenCours.Etat.ModuleCharge == 1)
     {
@@ -246,6 +250,8 @@ void f_MainWindow::ActiverActions(bool bActive)
         this->ui->actionRetrecir->setEnabled(bActive) ;
         this->ui->actionExecuter->setEnabled(bActive) ;
         this->ui->actionDebug->setEnabled(bActive) ;
+        this->ui->actionDemarrerServeurWeb->setEnabled(bActive) ;
+        this->ui->actionSV->setEnabled(bActive) ;
     }
 }
 
@@ -1584,3 +1590,19 @@ void f_MainWindow::on_envoieProfil(QString ProfilActif)
     }
 }
 
+
+void f_MainWindow::on_actionDemarrerServeurWeb_triggered()
+{
+    this->ui->actionArreterServeurWeb->setEnabled(true) ;
+    this->ui->actionRafraichirConfigurationServeurWeb->setEnabled(true) ;
+    this->ui->actionDemarrerServeurWeb->setEnabled(false) ;
+}
+
+
+
+void f_MainWindow::on_actionArreterServeurWeb_triggered()
+{
+    this->ui->actionArreterServeurWeb->setEnabled(false) ;
+    this->ui->actionRafraichirConfigurationServeurWeb->setEnabled(false) ;
+    this->ui->actionDemarrerServeurWeb->setEnabled(true);
+}

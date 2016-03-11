@@ -9,7 +9,7 @@
  * @version     1.0
  * @date        03/03/14
  *
- * REprésente le début ou la fin d'un organigramme. cette instruction ne fait pas d'actions en particulier,
+ * Représente le début ou la fin d'un organigramme. cette instruction ne fait pas d'actions en particulier,
  * elle délimite simplement les bornes du programmes.
  *
  * Fabrication  OpenOrganigram.pro

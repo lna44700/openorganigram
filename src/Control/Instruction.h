@@ -29,6 +29,7 @@ class Instruction : public QObject
         static  QString         ConvertirVersChaine(DescOperation   Desc);      //|
         static  QString         ConvertirVersChaine(DescRoutine     Desc);      //|
         static  QString         ConvertirVersChaine(DescTempo       Desc);      //|
+        static  QString         ConvertirVersChaine(DescEP          Desc);      //|
 
         static  void            ConvertirVersDesc(QString Chaine, DescCommentaire*  Desc);  //Conversion de chaine vers description pour appel de config
         static  void            ConvertirVersDesc(QString Chaine, DescCondition*    Desc);  //|
@@ -37,6 +38,7 @@ class Instruction : public QObject
         static  void            ConvertirVersDesc(QString Chaine, DescOperation*    Desc);  //|
         static  void            ConvertirVersDesc(QString Chaine, DescRoutine*      Desc);  //|
         static  void            ConvertirVersDesc(QString Chaine, DescTempo*        Desc);  //|
+        static  void            ConvertirVersDesc(QString Chaine, DescEP*           Desc);  //|
 
                 void            setSuivant(unsigned int nIdSuivant, unsigned int nIdSortie = 0) ;   //Mutateur d'Id suivant
                 void            RemplacerIdSuivant(unsigned int Ancien, unsigned int Nouveau);      //Remplace l'ancien id par le nouveau
@@ -50,6 +52,7 @@ class Instruction : public QObject
         virtual inline void     setDesc(DescOperation   /*Desc*/) {}    //|
         virtual inline void     setDesc(DescRoutine     /*Desc*/) {}    //|
         virtual inline void     setDesc(DescTempo       /*Desc*/) {}    //|
+        virtual inline void     setDesc(DescEP          /*Desc*/) {}    //|
 
         inline  unsigned int        getId()                 { return nId ; }        //Accesseur d'Id
         inline  QList<unsigned int> getIdSuivantParSortie() { return nIdSuivant ; } //Accesseur d'Id suivant

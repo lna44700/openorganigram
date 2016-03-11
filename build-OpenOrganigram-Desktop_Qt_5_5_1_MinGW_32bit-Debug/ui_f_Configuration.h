@@ -51,7 +51,7 @@ public:
 
     void retranslateUi(QDialog *f_Configuration)
     {
-        f_Configuration->setWindowTitle(QApplication::translate("f_Configuration", "Dialog", 0));
+        f_Configuration->setWindowTitle(QApplication::translate("f_Configuration", "Configuration", 0));
         Lb_Port->setText(QApplication::translate("f_Configuration", "Port du serveur :", 0));
     } // retranslateUi
 

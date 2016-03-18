@@ -29,7 +29,7 @@ private:
     Photo*              Interface;  //Photo de l'interface
     QString             NomInterface;
     QList<ItemBroche*>  ListeBroche;//Liste des broches possibles
-    QSettings* Conf;                //Config generale
+    QSettings* Conf;                //Config générale
 };
 
 #endif // SCENEPLANDECABLAGE_H

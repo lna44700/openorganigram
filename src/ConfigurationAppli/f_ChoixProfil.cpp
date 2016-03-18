@@ -42,6 +42,7 @@ f_ChoixProfil::f_ChoixProfil(QWidget *parent) :
 
     ui->LE_MdP->setVisible(false) ;
     ui->Lb_MdP->setVisible(false) ;
+    ui->LE_MdP->setEchoMode(QLineEdit::Password);
     this->setWindowTitle("Choix du profil utilisateur") ;
 
     int i =0 ;

@@ -54,5 +54,7 @@
         <file>Images/App/webstop-icon.png</file>
         <file>Images/App/webstart-icon.png</file>
         <file>Images/Items/iconparal.png</file>
+        <file>Images/App/import.png</file>
+        <file>Images/App/icons.png</file>
     </qresource>
 </RCC>

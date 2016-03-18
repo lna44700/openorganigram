@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../ressources.qrc">
+    <normaloff>:/Images/App/icons_simple.png</normaloff>:/Images/App/icons_simple.png</iconset>
+  </property>
   <widget class="QLabel" name="Lb_MdP">
    <property name="geometry">
     <rect>
@@ -34,6 +38,9 @@
      <width>110</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="inputMethodHints">
+    <set>Qt::ImhNoPredictiveText</set>
    </property>
   </widget>
   <widget class="QLabel" name="Lb_Profil">
@@ -76,6 +83,8 @@
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../ressources.qrc"/>
+ </resources>
  <connections/>
 </ui>

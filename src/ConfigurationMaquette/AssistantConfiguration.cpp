@@ -51,9 +51,10 @@ AssistantConfiguration::~AssistantConfiguration()
  */
 bool AssistantConfiguration::LancerAssistant()
 {
-    this->Etape1();
 
+    this->Etape1();
     Config.sync();
+
     return this->Status;
 }
 
@@ -64,6 +65,8 @@ void AssistantConfiguration::Etape1()
     f_ChoixControleur Etape1(&(this->Config));
 
     Reponse = Etape1.exec();
+
+
 
     if(Reponse == QDialog::Accepted)
     {

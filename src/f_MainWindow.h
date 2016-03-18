@@ -83,7 +83,7 @@ class f_MainWindow : public QMainWindow
         void OuvrirFenetreSupprimerProfil() ;               //Ouvre la fenêtre de suppression de profil
         void OuvrirFenetreModifierProfil() ;                //Ouvre la fenêtre de modification de profil
         void ChargerModule(QString sNomModule) ;            //Selectionne le bon module, met son indice dans IndiceModuleCourant et l'affiche.
-        void RechargerConfig();
+        void RechargerConfig(QString ConfigActuelle);       //Recharge les config avec les configs du plan de cablage
 
     private slots:
         void on_actionNouveau_triggered() ;                         //Demande de nouveau projet

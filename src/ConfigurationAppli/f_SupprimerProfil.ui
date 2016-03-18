@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../ressources.qrc">
+    <normaloff>:/Images/App/icons_simple.png</normaloff>:/Images/App/icons_simple.png</iconset>
+  </property>
   <widget class="QLabel" name="Lb_Profil">
    <property name="geometry">
     <rect>
@@ -99,6 +103,8 @@
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../ressources.qrc"/>
+ </resources>
  <connections/>
 </ui>

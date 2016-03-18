@@ -79,6 +79,9 @@ f_MainWindow::f_MainWindow(QWidget *    pParent) :
     this->ui->DockSV->hide() ;
     this->InitialiserBt_ItemDock() ;
 
+    // Ini. avec utilisateur de base
+    on_envoieProfil("Eleve");
+
     //Partie Kévin Interpréteur-----------------------------
     this->ui->actionInterpreteur->setIcon(QIcon(":/Images/App/prog.png"));  //Affiche un icone dans le menu d'action
     //-------------------------------------------------------
@@ -723,7 +726,7 @@ void f_MainWindow::ParserLeFichier(QFile& FichierOrganigramme, QProgressBar* pBa
  */
 void f_MainWindow::CreerNouveauProjet(QString CheminIni)
 {
-    //===== Mise en place de l'argbre de gestion de projet
+    //===== Mise en place de l'arbre de gestion de projet
 
     this->InitialiserGestionProjet();
 
@@ -1217,8 +1220,12 @@ void f_MainWindow::on_treeView_doubleClicked(const QModelIndex &index)
     if(Texte == "Plan de câblage")
     {
         QMessageBox::information(this, "Plan de câblage", "ouverture du plan") ;
+        QString NomProjetCourant("");
+        QSettings Temp("TempConfigArduino.ini");
+        NomProjetCourant = Temp.value("IDENTIFICATION/Nom", "").toString();
+        NomProjetCourant += "[PlanDeCablage].ini";
 
-        /*QFile ConfigCourante("ConfigCourante.ini");
+        QFile ConfigCourante(NomProjetCourant);
 
         if(ConfigCourante.open(QFile::ReadWrite))
         {
@@ -1226,13 +1233,13 @@ void f_MainWindow::on_treeView_doubleClicked(const QModelIndex &index)
             ConfigCourante.write(ConfigurationArduinoCourante);
             ConfigCourante.close();
 
-            AssistantConfiguration Wizard("ConfigCourante.ini");
+            AssistantConfiguration Wizard(NomProjetCourant);
 
             if(Wizard.LancerAssistant())
             {
-                this->RechargerConfig();
+                this->RechargerConfig(NomProjetCourant);
             }
-        }*/
+        }
     }
     else
     {
@@ -1271,9 +1278,9 @@ void f_MainWindow::ChargerModule(QString sNomModule)
     this->ActiverBt_ItemDock(true);
 }
 
-void f_MainWindow::RechargerConfig()
+void f_MainWindow::RechargerConfig(QString ConfigActuelle)
 {
-    InterpreteurFichierIni* ParseurIni(new InterpreteurFichierIni("ConfigCourante.ini", this->pArduino));
+    InterpreteurFichierIni* ParseurIni(new InterpreteurFichierIni(ConfigActuelle, this->pArduino));
     this->connect(ParseurIni, SIGNAL(FinConfigMaquette(InterpreteurFichierIni*,bool)), this, SLOT(slot_FinInterpretationIniOuvrirProjet(InterpreteurFichierIni*,bool)));
     ParseurIni->Interpreter();
 }
@@ -1459,28 +1466,34 @@ void f_MainWindow::on_actionImporter_triggered()
     //Vérification que le projet ouvert est bien sauvegardé
     if(this->ProjetSauve())
     {
-        if(this->EtatProjetenCours.Etat.ProjetOuvert == 1)
-        {
-            this->Fermer();
-            this->ActiverBt_ItemDock(false);
-
-            this->ActiverActions(false);
-
-            this->EtatProjetenCours.Etat.ModuleCharge = 0;
-            this->EtatProjetenCours.Etat.ProjetEnregistre = 0;
-            this->EtatProjetenCours.Etat.ProjetOuvert = 0;
-        }
-
         //Récuperation du fichier ini
         QString Chemin  (QFileDialog::getOpenFileName(this, "Importer un plan de câblage", QDir::homePath(), "Fichier ini (*.ini)"));
 
-        //S'il existe, on l'interprete
-        if(!Chemin.isEmpty())
+        if(Chemin != "")
         {
-            InterpreteurFichierIni* Interpreteur = new InterpreteurFichierIni(Chemin, pArduino, this);
-            connect(Interpreteur, SIGNAL(FinConfigMaquette(InterpreteurFichierIni*, bool)), this, SLOT(slot_FinInterpretationIniImportConfig(InterpreteurFichierIni*, bool)));
-            Interpreteur->Interpreter();
+            if(this->EtatProjetenCours.Etat.ProjetOuvert == 1)
+            {
+                this->Fermer();
+                this->ActiverBt_ItemDock(false);
+
+                this->ActiverActions(false);
+
+                this->EtatProjetenCours.Etat.ModuleCharge = 0;
+                this->EtatProjetenCours.Etat.ProjetEnregistre = 0;
+                this->EtatProjetenCours.Etat.ProjetOuvert = 0;
+            }
+
+
+
+            //S'il existe, on l'interprete
+            if(!Chemin.isEmpty())
+            {
+                InterpreteurFichierIni* Interpreteur = new InterpreteurFichierIni(Chemin, pArduino, this);
+                connect(Interpreteur, SIGNAL(FinConfigMaquette(InterpreteurFichierIni*, bool)), this, SLOT(slot_FinInterpretationIniImportConfig(InterpreteurFichierIni*, bool)));
+                Interpreteur->Interpreter();
+            }
         }
+
     }
 }
 
@@ -1502,7 +1515,7 @@ void f_MainWindow::slot_FinInterpretationIniImportConfig(InterpreteurFichierIni*
     //Si tout a fonctionné
     if(Reussi)
     {
-        //On crée le nouveua projet
+        //On crée le nouveau projet
         this->CreerNouveauProjet(Chemin);
     }
     else //Sinon erreur

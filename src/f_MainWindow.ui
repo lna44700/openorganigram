@@ -460,21 +460,6 @@
     <string>Projet</string>
    </property>
   </action>
-  <action name="actionConfiguration">
-   <property name="text">
-    <string>Configuration</string>
-   </property>
-  </action>
-  <action name="actionNouveauProfil">
-   <property name="text">
-    <string>Nouveau profil</string>
-   </property>
-  </action>
-  <action name="actionChoisirProfil">
-   <property name="text">
-    <string>Choisir un profil</string>
-   </property>
-  </action>
   <action name="actionAgrandir">
    <property name="enabled">
     <bool>false</bool>
@@ -508,16 +493,6 @@
     <string>Interpreteur</string>
    </property>
   </action>
-  <action name="actionSupprimerProfil">
-   <property name="text">
-    <string>Supprimer un profil</string>
-   </property>
-  </action>
-  <action name="actionModifierProfil">
-   <property name="text">
-    <string>Modifier un profil</string>
-   </property>
-  </action>
   <action name="actionGestionMem">
    <property name="enabled">
     <bool>true</bool>
@@ -531,16 +506,12 @@
    </property>
   </action>
   <action name="actionImporter">
+   <property name="icon">
+    <iconset resource="ressources.qrc">
+     <normaloff>:/Images/App/import.png</normaloff>:/Images/App/import.png</iconset>
+   </property>
    <property name="text">
     <string>Nouveau à partir d'un plan de câblage...</string>
-   </property>
-  </action>
-  <action name="actionServeur_Web">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Serveur Web</string>
    </property>
   </action>
   <action name="actionRedemarrer_la_maquette">

@@ -12,7 +12,7 @@ TARGET = OpenOrganigram
 TEMPLATE = app
 
 unix {
-    CONFIG += qesp_linux_udev
+    CONFIG += qesp_linux_udev CONSOLE
 }
 
 include (Interface/LibSerialPort/qextserialport.pri)

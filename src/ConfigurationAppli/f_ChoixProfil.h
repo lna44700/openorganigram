@@ -46,7 +46,6 @@ class f_ChoixProfil : public QDialog
         void     on_actionValider_accepted() ;
         void     on_actionValider_rejected() ;
 
-        //void on_Cb_Bx_Profil_activated(const QString &arg1);
         void on_Cb_Bx_Profil_currentTextChanged(const QString &arg1);
 };
 

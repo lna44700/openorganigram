@@ -33,11 +33,7 @@ int main(int argc, char *argv[])
 {
     QApplication    a  (argc, argv) ;
 
-//    f_ChoixProfil x (0) ;
-//    x.show();
     f_MainWindow    w  (0) ;
-//    QWidget::connect(&x, SIGNAL(EnvoieProfil(QString)),
-//                     &w, SLOT(on_envoieProfil(QString)));
 
     return a.exec();
 }

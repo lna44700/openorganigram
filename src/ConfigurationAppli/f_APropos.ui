@@ -76,7 +76,7 @@
     <bool>false</bool>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -98,7 +98,7 @@
       <item>
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Mise à jour : 12 avril 2016</string>
+         <string>Mise à jour : 15 avril 2016</string>
         </property>
        </widget>
       </item>
@@ -106,13 +106,13 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>20</x>
      <y>150</y>
      <width>241</width>
-     <height>51</height>
+     <height>53</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_3">

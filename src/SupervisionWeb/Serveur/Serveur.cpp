@@ -20,10 +20,8 @@
 #include "f_MainWindow.h"
 
 
-/** Controller for static files */
+/** Controlleur pour les fichiers statiques */
     extern ControleurFichierStatique* controleurFichierStatique;
-
-    /** Search the configuration file */
 
 Serveur::Serveur()
 {
@@ -39,24 +37,17 @@ void Serveur::lancerServeur()
 {
     //Supprime le fichier Supervision.html si cela n'a pas été fait (en cas de beug)
     remove ("www/Supervision.html");
-    // Find the configuration file
-       // QString configFileName=searchConfigFile();
 
 
-        // Configure static file controller
-        //QSettings* fileSettings=new QSettings(configFileName,QSettings::IniFormat);
+
+        // Configure le contrôleur de fichier statique
         QSettings* ConfigurationFichiers=new QSettings("OpenOrganigram.ini", QSettings::IniFormat) ;
-        //fileSettings->beginGroup("www");
         ConfigurationFichiers->beginGroup("www");
-        //controleurFichierStatique=new ControleurFichierStatique(fileSettings);
         controleurFichierStatique=new ControleurFichierStatique(ConfigurationFichiers);
 
-        // Configure and start the TCP listener
-       // QSettings* listenerSettings=new QSettings(configFileName,QSettings::IniFormat);
+        // Configure et démarre le serveur TCP
         QSettings* ConfigurationPort=new QSettings("OpenOrganigram.ini", QSettings::IniFormat) ;
-        //listenerSettings->beginGroup("listener");
         ConfigurationPort->beginGroup("listener");
-        //listener = new EcouteHTTP(listenerSettings,new RequeteMapper());
         listener = new EcouteHTTP(ConfigurationPort,new RequeteMapper());
 }
 

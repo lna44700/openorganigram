@@ -6,6 +6,11 @@
 #include <EcouteHTTP.h>
 
 
+/**
+Serveur permet la mise en marche du serveur Web depuis le bouton
+"actionDemarrerServeurWeb" dans f_MainWindow et son arret depuis le bouton "actionArreterServeurWeb".
+*/
+
 class Serveur: public QThread
 {
 public:

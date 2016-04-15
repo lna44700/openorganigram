@@ -18,7 +18,7 @@ unix {
 include (Interface/LibSerialPort/qextserialport.pri)
 include (Interface/LibParser/LibParser.pri)
 include(SupervisionWeb/Serveur/ServeurHTTP/ServeurHTTP.pri)
-# Not used: include(SupervisionWeb/qtservice/qtservice.pri)
+
 
 SOURCES += main.cpp\
         f_MainWindow.cpp \

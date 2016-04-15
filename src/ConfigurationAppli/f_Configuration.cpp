@@ -173,35 +173,25 @@ void f_Configuration::on_Bt_Validation_accepted()
 {
     NumeroPort = ui->LE_PortServeur->text() ;
 
-    // Find the configuration file
-        //QString configFileName=searchConfigFileIni();
-
-
     // Ouverture du fichier INI
-    //QSettings fileSettings(configFileName, QSettings::IniFormat);
     QSettings   ConfigurationServeur ("OpenOrganigram.ini", QSettings::IniFormat) ;
 
-    // Création du groupe [listener]
-    //fileSettings.beginGroup("listener");
+    // Création du groupe [listener];
     ConfigurationServeur.beginGroup("listener");
 
     if(NumeroPort == "")
     {
        // Création des différentes clés et valeurs correspondantes
-       // fileSettings.setValue("port", "80");
         ConfigurationServeur.setValue("port", "80");
        QMessageBox::warning(this, "Attention", "Un numéro de port est obligatoire ! Le port 80 à donc été mit pas défault.");
-
     }
     else
     {
-    // Création des différentes clés et valeurs correspondantes
-   // fileSettings.setValue("port", NumeroPort);
+    // Création de le clé Port et de la valeur correspondante
       ConfigurationServeur.setValue("port", NumeroPort);
     }
 
-    this->close() ;
-
+    this->close() ; // Ferme la fenêtre de configuration
 }
 
 

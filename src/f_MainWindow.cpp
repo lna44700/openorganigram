@@ -1554,7 +1554,7 @@ void f_MainWindow::slot_FinInterpretationIniImportConfig(InterpreteurFichierIni*
 }
 
 /**
- * Slot de fin d'interpretation en ouverture de fihcier
+ * Slot de fin d'interpretation en ouverture de fichier
  * @brief f_MainWindow::slot_FinInterpretationIniOuvrirProjet
  * @param Interpreteur
  * @param Reussi
@@ -1632,23 +1632,23 @@ void f_MainWindow::on_envoieProfil(QString ProfilActif)
 
 void f_MainWindow::on_actionDemarrerServeurWeb_triggered()
 {
-    this->ui->actionArreterServeurWeb->setEnabled(true) ;
-    this->ui->actionDemarrerServeurWeb->setEnabled(false) ;
+    this->ui->actionArreterServeurWeb->setEnabled(true) ; // Le bouton arreter se dégrise
+    this->ui->actionDemarrerServeurWeb->setEnabled(false) ; // Le bouton démarrer se grise
 
-    serveurWeb.lancerServeur();
-    DonneesWeb.AfficherNomBroche();
+    serveurWeb.lancerServeur(); // Lance le serveur Web
+    DonneesWeb.AfficherNomBroche(); // Affiche les données de la maquette dans la page web "Supervision.html"
 }
 
 
 
 void f_MainWindow::on_actionArreterServeurWeb_triggered()
 {
-    this->ui->actionArreterServeurWeb->setEnabled(false) ;
-    this->ui->actionDemarrerServeurWeb->setEnabled(true);
-    serveurWeb.stopperServeur();
+    this->ui->actionArreterServeurWeb->setEnabled(false) ; // Le bouton arreter serveur se grise
+    this->ui->actionDemarrerServeurWeb->setEnabled(true);  // Le bouton démarrer serveur se dégrise
+    serveurWeb.stopperServeur(); // Le serveur se stop
 }
 
 void f_MainWindow::on_actionA_propos_triggered()
 {
-    this->OuvrirFenetreAPropos(); ;
+    this->OuvrirFenetreAPropos(); ; // Ouvre la fenêtre "A propos" qui donne des infos sur l'application.
 }

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>290</width>
-    <height>130</height>
+    <height>159</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,11 +17,117 @@
    <iconset resource="../ressources.qrc">
     <normaloff>:/Images/App/icons_simple.png</normaloff>:/Images/App/icons_simple.png</iconset>
   </property>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>271</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Supervision Web</string>
+   </property>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>50</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Port actuel : </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_Port">
+       <property name="text">
+        <string>port</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>80</y>
+      <width>152</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="Lb_Port">
+       <property name="text">
+        <string>Nouveau  n° port :</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="LE_PortServeur"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="label_logoPort">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>40</y>
+      <width>61</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap resource="../../../../Réalisations/Test/openorganigramOk/openorganigram/src/ressources.qrc">:/Images/App/Port.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>20</y>
+      <width>171</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Votre adresse IP :</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="statusLabel">
+       <property name="text">
+        <string>192.168.1.1</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
   <widget class="QDialogButtonBox" name="Bt_Validation">
    <property name="geometry">
     <rect>
-     <x>70</x>
-     <y>90</y>
+     <x>80</x>
+     <y>130</y>
      <width>150</width>
      <height>25</height>
     </rect>
@@ -29,33 +135,14 @@
    <property name="standardButtons">
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
-  </widget>
-  <widget class="QLineEdit" name="LE_PortServeur">
-   <property name="geometry">
-    <rect>
-     <x>150</x>
-     <y>40</y>
-     <width>110</width>
-     <height>20</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="Lb_Port">
-   <property name="geometry">
-    <rect>
-     <x>40</x>
-     <y>40</y>
-     <width>100</width>
-     <height>15</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Port du serveur :</string>
+   <property name="centerButtons">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>
  <resources>
   <include location="../ressources.qrc"/>
+  <include location="../../../../Réalisations/Test/openorganigramOk/openorganigram/src/ressources.qrc"/>
  </resources>
  <connections/>
 </ui>

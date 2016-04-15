@@ -12,12 +12,13 @@ TARGET = OpenOrganigram
 TEMPLATE = app
 
 unix {
-    CONFIG += qesp_linux_udev CONSOLE
+    CONFIG += qesp_linux_udev
 }
 
 include (Interface/LibSerialPort/qextserialport.pri)
 include (Interface/LibParser/LibParser.pri)
-
+include(SupervisionWeb/Serveur/ServeurHTTP/ServeurHTTP.pri)
+# Not used: include(SupervisionWeb/qtservice/qtservice.pri)
 
 SOURCES += main.cpp\
         f_MainWindow.cpp \
@@ -44,6 +45,7 @@ SOURCES += main.cpp\
     ConfigurationAppli/f_CreerProfil.cpp \
     ConfigurationAppli/f_ChoixProfil.cpp \
     ConfigurationAppli/f_SupprimerProfil.cpp \
+    ConfigurationAppli/f_APropos.cpp \
     Control/ModuleManager.cpp \
     Control/Inst/Inst_Ope.cpp \
     Control/ModInst/f_ModInst_Ope.cpp \
@@ -81,9 +83,6 @@ SOURCES += main.cpp\
     ConfigurationMaquette/RealiserPlanDeCablage/ItemBroche.cpp \
     ConfigurationMaquette/RealiserPlanDeCablage/Photo.cpp \
     ConfigurationMaquette/RealiserPlanDeCablage/CapteurActionneur.cpp \
-    SupervisionWeb/ServeurHTTPThread.cpp \
-    SupervisionWeb/ServeurHTTPControlleur.cpp \
-    SupervisionWeb/ConnexionHTTP.cpp \
     ConfigurationMaquette/DefinirActionsEtTests/ItemActionTest.cpp \
     ConfigurationMaquette/DefinirActionsEtTests/f_EditerActionTest.cpp \
     Supervision/f_AffichageFenetre.cpp \
@@ -94,7 +93,10 @@ SOURCES += main.cpp\
     Supervision/Widgets/WidgetMOT1.cpp \
     Vue/Item/Item_ExecPara.cpp \
     Control/Inst/Inst_EP.cpp \
-    Control/ModInst/f_ModInst_EP.cpp
+    Control/ModInst/f_ModInst_EP.cpp \
+    SupervisionWeb/Serveur/RequeteMapper.cpp \
+    SupervisionWeb/Serveur/Serveur.cpp \
+    SupervisionWeb/Web/src/AfficherDonnees.cpp
 
 
 HEADERS  += f_MainWindow.h \
@@ -122,6 +124,7 @@ HEADERS  += f_MainWindow.h \
     ConfigurationAppli/f_CreerProfil.h \
     ConfigurationAppli/f_ChoixProfil.h \
     ConfigurationAppli/f_SupprimerProfil.h \
+    ConfigurationAppli/f_APropos.h \
     Control/ModuleManager.h \
     Control/Inst/Inst_Ope.h \
     Control/ModInst/f_ModInst_Ope.h \
@@ -159,9 +162,6 @@ HEADERS  += f_MainWindow.h \
     ConfigurationMaquette/RealiserPlanDeCablage/ItemBroche.h \
     ConfigurationMaquette/RealiserPlanDeCablage/Photo.h \
     ConfigurationMaquette/RealiserPlanDeCablage/CapteurActionneur.h \
-    SupervisionWeb/ServeurHTTPThread.h \
-    SupervisionWeb/ServeurHTTPControlleur.h \
-    SupervisionWeb/ConnexionHTTP.h \
     ConfigurationMaquette/DefinirActionsEtTests/ItemActionTest.h \
     ConfigurationMaquette/DefinirActionsEtTests/f_EditerActionTest.h \
     Supervision/f_AffichageFenetre.h \
@@ -173,7 +173,10 @@ HEADERS  += f_MainWindow.h \
     Vue/Item/Item_ExecPara.h \
     Control/Inst/Inst_EP.h \
     f_ModInst_EP.h \
-    Control/ModInst/f_ModInst_EP.h
+    Control/ModInst/f_ModInst_EP.h \
+    SupervisionWeb/Serveur/RequeteMapper.h \
+    SupervisionWeb/Serveur/Serveur.h \
+    SupervisionWeb/Web/src/AfficherDonnees.h
 
 FORMS    += f_MainWindow.ui \
     Interface/f_InterpreteurCommandes.ui \
@@ -184,6 +187,7 @@ FORMS    += f_MainWindow.ui \
     ConfigurationAppli/f_CreerProfil.ui \
     ConfigurationAppli/f_ChoixProfil.ui \
     ConfigurationAppli/f_SupprimerProfil.ui \
+    ConfigurationAppli/f_APropos.ui \
     Control/ModInst/f_ModInst_Ope.ui \
     Control/ModInst/f_ModInst_Cond.ui \
     Control/ModInst/f_ModInst_ES.ui \
@@ -210,4 +214,4 @@ RESOURCES += \
 
 RC_FILE += OpenOrganigram.rc
 
-OTHER_FILES +=
+OTHER_FILES += SupervisionWeb/Web/etc/* SupervisionWeb/Web/etc/www/*

@@ -15,6 +15,7 @@ class Arduino ;
 #include "./LibSerialPort/qextserialport.h"
 #include"../TypeCommun.h"
 #include "../Supervision/f_Supervision.h"
+#include "SupervisionWeb/Web/src/AfficherDonnees.h"
 
 
 

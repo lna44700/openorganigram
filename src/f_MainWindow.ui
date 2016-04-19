@@ -145,6 +145,7 @@
    <addaction name="separator"/>
    <addaction name="actionAgrandir"/>
    <addaction name="actionRetrecir"/>
+   <addaction name="actionVueGlobale"/>
    <addaction name="separator"/>
    <addaction name="actionSV"/>
    <addaction name="actionConvert"/>
@@ -612,6 +613,21 @@
    </property>
    <property name="toolTip">
     <string>Rafraîchir Configuration Serveur Web</string>
+   </property>
+  </action>
+  <action name="actionVueGlobale">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="ressources.qrc">
+     <normaloff>:/Images/App/VueGlobale-48.png</normaloff>:/Images/App/VueGlobale-48.png</iconset>
+   </property>
+   <property name="text">
+    <string>VueGlobale</string>
+   </property>
+   <property name="toolTip">
+    <string>VueGlobale</string>
    </property>
   </action>
  </widget>

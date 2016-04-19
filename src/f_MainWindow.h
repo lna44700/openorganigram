@@ -11,6 +11,7 @@ class f_MainWindow;
 #include <QLabel>
 #include <QXmlStreamReader>
 #include <QProgressBar>
+#include <QDir>
 
 //=====   Headers persos  =====
 #include "Control/ModuleManager.h"
@@ -64,6 +65,8 @@ class f_MainWindow : public QMainWindow
 		ServeurHTTPThread       ServeurWeb;                 //Serveur web pour supervision
         QByteArray              ConfigurationArduinoCourante;//Configuration acutellement chargée dans le logiciel
         Ui::f_MainWindow *      ui ;                        //Objet d'interface graphique
+        QDir                    RepertoireProjets;          //Dossier à utiliser de base pour la recherche de fichier
+        QString                 CheminRepertoirePojets;     //Chemin du dossier des projets
 
         //===== METHODES PRIVEES =====
         void InitialiserGestionProjet() ;
@@ -117,6 +120,8 @@ class f_MainWindow : public QMainWindow
         void on_envoieProfil(QString ProfilActif);
         void on_actionDemarrerServeurWeb_triggered();
         void on_actionArreterServeurWeb_triggered();
+        void on_actionSV_triggered();
+        void on_actionVueGlobale_triggered();
 };
 
 #endif // F_MAINWINDOW_H

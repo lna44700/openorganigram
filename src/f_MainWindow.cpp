@@ -67,7 +67,8 @@ f_MainWindow::f_MainWindow(QWidget *    pParent) :
     pArduino                (new Arduino),
     pEtatConnexion          (new QLabel),
 	ServeurWeb              (),
-    ui                      (new Ui::f_MainWindow)
+    ui                      (new Ui::f_MainWindow),
+    RepertoireProjets       (QDir::currentPath())
 {
 
     // Initialisation générale
@@ -96,6 +97,16 @@ f_MainWindow::f_MainWindow(QWidget *    pParent) :
     this->EtatProjetenCours.Etat.ProjetEnregistre = 0;
     this->EtatProjetenCours.Etat.ModuleCharge = 0;
     this->EtatProjetenCours.sCheminVersProjet = "";
+
+    //Création du répertoire des projets
+    QString CheminRepertoireProjets ("");
+    CheminRepertoireProjets = this->RepertoireProjets.absolutePath()+"/Projets";
+    if(!QDir(CheminRepertoireProjets).exists())
+    {
+        this->RepertoireProjets.setPath(CheminRepertoireProjets);
+        this->RepertoireProjets.mkdir(CheminRepertoireProjets);
+    }
+    this->CheminRepertoirePojets = CheminRepertoireProjets;
 
     //Désactivation des actions
     this->ActiverActions(false);
@@ -255,6 +266,7 @@ void f_MainWindow::ActiverActions(bool bActive)
         this->ui->actionDebug->setEnabled(bActive) ;
         this->ui->actionDemarrerServeurWeb->setEnabled(bActive) ;
         this->ui->actionSV->setEnabled(bActive) ;
+        this->ui->actionVueGlobale->setEnabled(bActive);
     }
 }
 
@@ -897,10 +909,6 @@ void f_MainWindow::CreerNouveauProjet(QString CheminIni)
 
     }
 
-
-
-
-
     //===== Mise à jour des informations concernant le projet
 
     this->EtatProjetenCours.Etat.ProjetOuvert = 1;
@@ -911,6 +919,7 @@ void f_MainWindow::CreerNouveauProjet(QString CheminIni)
     this->ActiverBt_ItemDock(true) ;
     this->ActiverActions(true);
 }
+
 
 /**
  * Vérifie si le projet et bien sauvegardé, propose une sauvegarde dans
@@ -979,22 +988,22 @@ void f_MainWindow::ObtenirEmplacementProjet(bool bOuvrir)
 
     if(bOuvrir)
     {
-        sChemin = QFileDialog::getOpenFileName(this, "Ouvrir...", QDir::homePath(), "Fichier OpenOrganigram (*.oorg)") ;
+        sChemin = QFileDialog::getOpenFileName(this, "Ouvrir...", this->CheminRepertoirePojets, "Fichier OpenOrganigram (*.oorg)") ;
     }
     else
     {
-        sChemin = QFileDialog::getSaveFileName(this, "Enregistrer sous...", QDir::homePath(), "Fichier OpenOrganigram (*.oorg)") ;
+        sChemin = QFileDialog::getSaveFileName(this, "Enregistrer sous...", this->CheminRepertoirePojets, "Fichier OpenOrganigram (*.oorg)") ;
     }
 
     this->EtatProjetenCours.sCheminVersProjet = sChemin ;
 }
+
 
 /** Création de la fenêtre de configuration et ouverture
  *
  * @brief   f_MainWindow::OuvrirFenetreConfig()
  * @see     f_Configuration
 */
-
 void f_MainWindow::OuvrirFenetreConfig()
 {
     f_Configuration   f_Config  (this) ;
@@ -1002,12 +1011,12 @@ void f_MainWindow::OuvrirFenetreConfig()
     f_Config.exec() ;
 }
 
+
 /** Création de la fenêtre de configuration et ouverture
  *
  * @brief   f_MainWindow::OuvrirFenetreProfil()
  * @see     f_Configuration
 */
-
 void f_MainWindow::OuvrirFenetreNouveauProfil()
 {
     f_CreerProfil   f_Profil  (this) ;
@@ -1021,7 +1030,6 @@ void f_MainWindow::OuvrirFenetreNouveauProfil()
 * @brief    f_MainWindow::OuvrirFenetreChoixProfil()
 * @see      f_ChoixProfil
 */
-
 void f_MainWindow::OuvrirFenetreChoisirProfil()
 {
     f_ChoixProfil    f_ChoisirProfil  (this) ;
@@ -1037,7 +1045,6 @@ void f_MainWindow::OuvrirFenetreChoisirProfil()
 * @brief    f_MainWindow::OuvrirFenetreSupprimerProfil()
 * @see      f_SupprimerProfil
 */
-
 void f_MainWindow::OuvrirFenetreSupprimerProfil()
 {
     f_SupprimerProfil    f_SupprimerLeProfil  (this) ;
@@ -1051,7 +1058,6 @@ void f_MainWindow::OuvrirFenetreSupprimerProfil()
 * @brief    f_MainWindow::OuvrirFenetreModifierProfil()
 * @see      f_ModifierProfil
 */
-
 void f_MainWindow::OuvrirFenetreModifierProfil()
 { 
     bool    bOk (false) ;
@@ -1069,8 +1075,6 @@ void f_MainWindow::OuvrirFenetreModifierProfil()
         f_ModifierLeProfil.ModifierProfil() ;
         f_ModifierLeProfil.exec() ;
     }
-
-
 }
 
 
@@ -1220,11 +1224,7 @@ void f_MainWindow::on_treeView_doubleClicked(const QModelIndex &index)
     if(Texte == "Plan de câblage")
     {
         QMessageBox::information(this, "Plan de câblage", "ouverture du plan") ;
-        QString NomProjetCourant("");
-        QSettings Temp("TempConfigArduino.ini");
-        NomProjetCourant = Temp.value("IDENTIFICATION/Nom", "").toString();
-        NomProjetCourant += "[PlanDeCablage].ini";
-
+        QString NomProjetCourant("TempConfigArduino.ini");
         QFile ConfigCourante(NomProjetCourant);
 
         if(ConfigCourante.open(QFile::ReadWrite))
@@ -1312,6 +1312,22 @@ void f_MainWindow::on_actionRetrecir_triggered()
 
     Vue->scale(100.0/110.0, 100.0/110.0);
 }
+
+/**
+ * Dezoom l'organigramme pour vue globale
+ *
+ * @brief f_MainWindow::on_actionVueGlobale_triggered
+ */
+void f_MainWindow::on_actionVueGlobale_triggered()
+{
+    QTabWidget *    Central (qobject_cast<QTabWidget *>(this->centralWidget())) ;
+
+    QGraphicsView*  Vue     (qobject_cast<QGraphicsView *>(Central->currentWidget())) ;
+
+    Vue->scale(this->centralWidget()->width(), this->centralWidget()->height());
+
+}
+
 
 /**
  * Appel de l'interpreteur de commande pour shelle Mega Arduino
@@ -1564,17 +1580,30 @@ void f_MainWindow::on_actionServeur_Web_toggled(bool arg1)
     }
 }
 
+/**
+ * Slot de redémarrage de la maquette
+ * @brief f_MainWindow::on_actionRedemarrer_la_maquette_triggered
+ */
 void f_MainWindow::on_actionRedemarrer_la_maquette_triggered()
 {
     this->pArduino->EnvoyerDonnees(QString("Z"), GEN);
 }
 
+/**
+ * Slot de gestion des composants I2C
+ * @brief f_MainWindow::on_actionGestion_des_composants_I2C_triggered
+ */
 void f_MainWindow::on_actionGestion_des_composants_I2C_triggered()
 {
     f_ConfigI2C ConfigI2C(this->pArduino, this);
     ConfigI2C.exec();
 }
 
+/**
+ * Slot d'envoie de profil pour la paramètrage de l'application
+ * @brief f_MainWindow::on_envoieProfil
+ * @param ProfilActif
+ */
 void f_MainWindow::on_envoieProfil(QString ProfilActif)
 {
     this->ProfilActif = ProfilActif ;
@@ -1604,6 +1633,7 @@ void f_MainWindow::on_envoieProfil(QString ProfilActif)
 }
 
 
+
 void f_MainWindow::on_actionDemarrerServeurWeb_triggered()
 {
     this->ui->actionArreterServeurWeb->setEnabled(true) ;
@@ -1619,3 +1649,4 @@ void f_MainWindow::on_actionArreterServeurWeb_triggered()
     this->ui->actionRafraichirConfigurationServeurWeb->setEnabled(false) ;
     this->ui->actionDemarrerServeurWeb->setEnabled(true);
 }
+

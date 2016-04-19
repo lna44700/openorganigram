@@ -81,7 +81,6 @@ f_CreerProfil::~f_CreerProfil()
 * @brief    f_CreerProfil::on_BtBx_Valider_accepted()
 * @see      f_CreerProfil
 */
-
 void f_CreerProfil::on_BtBx_Valider_accepted()
 {
     QSettings   Utilisateur ("C:\\Users\\Jonathan\\Documents\\Projet\\openorganigram\\Utilisateur.ini", QSettings::IniFormat) ;

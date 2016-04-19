@@ -3,16 +3,17 @@
 * @brief        Fichier de gestion du choix du profil utilisateur.
 *
 * @author       AUBRY Jonathan
+* @author       GUITTON Lucas
 * @author       STS IRIS, Lycée Nicolas APPERT, ORVAULT (FRANCE)
 * @since        18/03/2014
-* @version      1.0
-* @date         18/03/2014
+* @version      1.1
+* @date         09/04/2016
 *
 * Fichier source de la classe f_ChoixProfil, permettant de choisir un profil parmis ceux présent dans le fichier de profil.
 *
 * Fabrication   OpenOrganigram.pro
 *
-* @todo         Besoin de vérifier si le fichier d'utilisateur existe, puis lire à l'intérieur et y trouver les différents profils existant.
+* @todo         Rendre le mot de passe crypté lorsqu'il est inscrit dans le fichier .ini
 *
 * @bug          <date du bug> - <CORRIGE> - <Intitulé précis du bug>
 */
@@ -169,6 +170,11 @@ QString f_ChoixProfil::Get_ProfilActif()
 }
 
 
+/**
+ * Slot de récupération du profil sélectionné
+ * @brief f_MainWindow::on_Cb_Bx_Profil_currentTextChanged
+ * @param &arg1
+ */
 void f_ChoixProfil::on_Cb_Bx_Profil_currentTextChanged(const QString &arg1)
 {
     if (arg1 == "Professeur")
@@ -185,6 +191,11 @@ void f_ChoixProfil::on_Cb_Bx_Profil_currentTextChanged(const QString &arg1)
 }
 
 
+/**
+ * Event de fermeture
+ * @brief f_MainWindow::closeEvent
+ * @param *CloseEvent
+ */
 void f_ChoixProfil::closeEvent(QCloseEvent *CloseEvent)
 {
     emit(EnvoieProfil(ProfilActif));

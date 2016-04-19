@@ -151,11 +151,24 @@ void f_RealiserPlanCablage::on_Btn_Suiv_clicked()
         QByteArray Contenu  (FichierACopier.readAll());
         QSettings FichierCopier("TempConfigArduino.ini", QSettings::IniFormat);
         QString NomPlanDeCablage = FichierCopier.value("IDENTIFICATION/Nom", "").toString();
+
+        QDir RepertoireProjetCourant(QDir::currentPath());
+        QString CheminRepertoireProjetCourant ("");
+        CheminRepertoireProjetCourant = RepertoireProjetCourant.absolutePath()+"/Projets/"+NomPlanDeCablage;
+        if(!QDir(CheminRepertoireProjetCourant).exists())
+        {
+            RepertoireProjetCourant.mkdir(CheminRepertoireProjetCourant);
+        }
+        RepertoireProjetCourant.setPath(CheminRepertoireProjetCourant);
+        RepertoireProjetCourant.setCurrent(CheminRepertoireProjetCourant);
+
         NomPlanDeCablage += "[Plandecablage].ini";
         QFile PlanDeCablage(NomPlanDeCablage);
         PlanDeCablage.open(QFile::ReadWrite);
         PlanDeCablage.write(Contenu);
         PlanDeCablage.close();
+
+        RepertoireProjetCourant.setCurrent(QApplication::applicationDirPath());
     }
     FichierACopier.close();
 

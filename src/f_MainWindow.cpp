@@ -45,11 +45,23 @@
 #include "ConfigurationAppli/f_SupprimerProfil.h"
 #include "ConfigurationAppli/f_ChoixProfil.h"
 #include "ConfigurationAppli/f_ModifierProfil.h"
+#include "ConfigurationAppli/f_APropos.h"
 #include "Interface/f_InterpreteurCommandes.h"
 #include "Control/Inst/Inst_Boucle.h"
 #include "Interface/f_GestionMem.h"
 #include "Interface/f_Compilation.h"
 #include "Interface/f_ConfigI2C.h"
+#include "PoolGestionnaireConnexionHTTP.h"
+#include "ControleurFichierStatique.h"
+#include "EcouteHTTP.h"
+#include "GestionnaireConnexionHTTP.h"
+#include "GestionnaireRequeteHTTP.h"
+#include "ReponseHTTP.h"
+#include "RequeteHTTP.h"
+#include "GlobalHTTP.h"
+#include "SupervisionWeb/Serveur/RequeteMapper.h"
+#include "SupervisionWeb/Serveur/Serveur.h"
+#include "SupervisionWeb/Web/src/AfficherDonnees.h"
 
 /**
  * Constructeur de la fenêtre, cette methode met en place toute l'interface
@@ -69,6 +81,7 @@ f_MainWindow::f_MainWindow(QWidget *    pParent) :
 	ServeurWeb              (),
     ui                      (new Ui::f_MainWindow),
     RepertoireProjets       (QDir::currentPath())
+
 {
 
     // Initialisation générale
@@ -1077,6 +1090,21 @@ void f_MainWindow::OuvrirFenetreModifierProfil()
     }
 }
 
+/** Création de la fenêtre à propos
+*
+* @brief    f_MainWindow::OuvrirFenetreAPropos()
+* @see      f_APropos
+*/
+
+void f_MainWindow::OuvrirFenetreAPropos()
+{
+    f_APropos    f_APropos  (this) ;
+    //QWidget::connect(&f_ChoisirProfil, SIGNAL(EnvoieProfil(QString)),
+      //               this, SLOT(on_envoieProfil(QString)));
+
+    f_APropos.exec() ;
+}
+
 
 /**
  * Slot correspondant à l'action de nouveau projet
@@ -1541,7 +1569,7 @@ void f_MainWindow::slot_FinInterpretationIniImportConfig(InterpreteurFichierIni*
 }
 
 /**
- * Slot de fin d'interpretation en ouverture de fihcier
+ * Slot de fin d'interpretation en ouverture de fichier
  * @brief f_MainWindow::slot_FinInterpretationIniOuvrirProjet
  * @param Interpreteur
  * @param Reussi
@@ -1574,10 +1602,7 @@ void f_MainWindow::slot_FinInterpretationIniOuvrirProjet(InterpreteurFichierIni*
  */
 void f_MainWindow::on_actionServeur_Web_toggled(bool arg1)
 {
-    if(arg1)
-    {
-		ServeurWeb.start();
-    }
+
 }
 
 /**
@@ -1636,17 +1661,24 @@ void f_MainWindow::on_envoieProfil(QString ProfilActif)
 
 void f_MainWindow::on_actionDemarrerServeurWeb_triggered()
 {
-    this->ui->actionArreterServeurWeb->setEnabled(true) ;
-    this->ui->actionRafraichirConfigurationServeurWeb->setEnabled(true) ;
-    this->ui->actionDemarrerServeurWeb->setEnabled(false) ;
+    this->ui->actionArreterServeurWeb->setEnabled(true) ; // Le bouton arreter se dégrise
+    this->ui->actionDemarrerServeurWeb->setEnabled(false) ; // Le bouton démarrer se grise
+
+    serveurWeb.lancerServeur(); // Lance le serveur Web
+    DonneesWeb.AfficherNomBroche(); // Affiche les données de la maquette dans la page web "Supervision.html"
 }
 
 
 
 void f_MainWindow::on_actionArreterServeurWeb_triggered()
 {
-    this->ui->actionArreterServeurWeb->setEnabled(false) ;
-    this->ui->actionRafraichirConfigurationServeurWeb->setEnabled(false) ;
-    this->ui->actionDemarrerServeurWeb->setEnabled(true);
+    this->ui->actionArreterServeurWeb->setEnabled(false) ; // Le bouton arreter serveur se grise
+    this->ui->actionDemarrerServeurWeb->setEnabled(true);  // Le bouton démarrer serveur se dégrise
+    serveurWeb.stopperServeur(); // Le serveur se stop
+}
+
+void f_MainWindow::on_actionA_propos_triggered()
+{
+    this->OuvrirFenetreAPropos(); ; // Ouvre la fenêtre "A propos" qui donne des infos sur l'application.
 }
 

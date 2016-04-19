@@ -18,7 +18,9 @@ class f_MainWindow;
 #include "Interface/BtnItem.h"
 #include "Interface/Arduino.h"
 #include "Interface/InterpreteurFichierIni.h"
-#include "SupervisionWeb/ServeurHTTPThread.h"
+//#include "SupervisionWeb/ServeurHTTPThread.h"
+#include "SupervisionWeb/Serveur/Serveur.h"
+#include "SupervisionWeb/Web/src/AfficherDonnees.h"
 
 typedef struct {
     unsigned char ProjetOuvert : 1 ;
@@ -62,11 +64,13 @@ class f_MainWindow : public QMainWindow
         BtnItem *               pBt_ItemDock[8] ;           //8 boutons dockés sur le côté pour ajouter les items organigramme1
         Arduino *               pArduino ;                  //Connexion à l'arduino
         QLabel *                pEtatConnexion ;            //Label rendant compte de l'état de la connexion
-		ServeurHTTPThread       ServeurWeb;                 //Serveur web pour supervision
+//		ServeurHTTPThread       ServeurWeb;                 //Serveur web pour supervision
         QByteArray              ConfigurationArduinoCourante;//Configuration acutellement chargée dans le logiciel
         Ui::f_MainWindow *      ui ;                        //Objet d'interface graphique
         QDir                    RepertoireProjets;          //Dossier à utiliser de base pour la recherche de fichier
         QString                 CheminRepertoirePojets;     //Chemin du dossier des projets
+        Serveur                 serveurWeb;
+        AfficherDonnees         DonneesWeb;
 
         //===== METHODES PRIVEES =====
         void InitialiserGestionProjet() ;
@@ -85,6 +89,7 @@ class f_MainWindow : public QMainWindow
         void OuvrirFenetreChoisirProfil() ;                 //Ouvre la fenêtre de choix de profil
         void OuvrirFenetreSupprimerProfil() ;               //Ouvre la fenêtre de suppression de profil
         void OuvrirFenetreModifierProfil() ;                //Ouvre la fenêtre de modification de profil
+        void OuvrirFenetreAPropos();                        //Ouvre la fenêtre à propos de l'appli
         void ChargerModule(QString sNomModule) ;            //Selectionne le bon module, met son indice dans IndiceModuleCourant et l'affiche.
         void RechargerConfig(QString ConfigActuelle);       //Recharge les config avec les configs du plan de cablage
 
@@ -122,6 +127,7 @@ class f_MainWindow : public QMainWindow
         void on_actionArreterServeurWeb_triggered();
         void on_actionSV_triggered();
         void on_actionVueGlobale_triggered();
+        void on_actionA_propos_triggered();
 };
 
 #endif // F_MAINWINDOW_H

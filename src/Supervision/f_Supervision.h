@@ -26,7 +26,7 @@ class f_Supervision : public QWidget
     Q_OBJECT
 
     public :
-        explicit    f_Supervision   (Arduino *pControleur,QWidget *parent = 0);
+                    f_Supervision   (Arduino *pControleur,QWidget *parent = 0);
                     void            EnvoyerDonneesSup(QString Commande);
                     void            OuvrirFichierINI(QString sChemin );
                     QByteArray      SimulerEnvoiDonnees(QByteArray Commande);

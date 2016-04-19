@@ -152,7 +152,6 @@
    <addaction name="separator"/>
    <addaction name="actionDemarrerServeurWeb"/>
    <addaction name="actionArreterServeurWeb"/>
-   <addaction name="actionRafraichirConfigurationServeurWeb"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="DockBtn">

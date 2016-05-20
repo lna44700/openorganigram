@@ -54,7 +54,7 @@ class f_MainWindow : public QMainWindow
 
     private:
         //===== ATTRIBUTS  PRIVES =====
-        QString                 MotDePass ;                 //Mot de passe du compte admin (je suppose...)
+        QString                 MotDePass ;                 //Mot de passe du compte admin
         QString                 ProfilActif ;               //Identifie le profil actif de l'appli
         QList<ModuleManager *>  Lst_pManagers ;             //Liste des managers de modules
         int                     IndiceModuleCourant ;       //Indice dans la liste du module actuellement chargé
@@ -69,7 +69,7 @@ class f_MainWindow : public QMainWindow
         Ui::f_MainWindow *      ui ;                        //Objet d'interface graphique
         QDir                    RepertoireProjets;          //Dossier à utiliser de base pour la recherche de fichier
         QString                 CheminRepertoirePojets;     //Chemin du dossier des projets
-        Serveur                 serveurWeb;
+        Serveur                 ServeurWeb;
         AfficherDonnees         DonneesWeb;
 
         //===== METHODES PRIVEES =====
@@ -92,6 +92,9 @@ class f_MainWindow : public QMainWindow
         void OuvrirFenetreAPropos();                        //Ouvre la fenêtre à propos de l'appli
         void ChargerModule(QString sNomModule) ;            //Selectionne le bon module, met son indice dans IndiceModuleCourant et l'affiche.
         void RechargerConfig(QString ConfigActuelle);       //Recharge les config avec les configs du plan de cablage
+        QString RecupererNomProjet(QString sChemin);                       //Récupère le nom du projet en cours
+        QString CreerArborescence(QString NomProjet);       //Créé l'arborescence du dossier de projet en fonction du nom du projet en cours
+        bool CreerPlanCablage(QString Chemin, QString NomProjet); //Créé un plan de cablage dans le bon répertoire et au nom du projet en cours.
 
     private slots:
         void on_actionNouveau_triggered() ;                         //Demande de nouveau projet
@@ -119,13 +122,11 @@ class f_MainWindow : public QMainWindow
         void on_actionImporter_triggered();                         //Demande de nouveau projet à partri d'un plan de câblage existant
         void slot_FinInterpretationIniImportConfig(InterpreteurFichierIni *Interpreteur, bool Reussi);  //Fin d'interpretation du fichier ini pour l'importation
         void slot_FinInterpretationIniOuvrirProjet(InterpreteurFichierIni *Interpreteur, bool Reussi);  //Fin d'interpretation du fichier ini pour l'ouverture
-        void on_actionServeur_Web_toggled(bool arg1);               //Demande de démarrage du seveur web
         void on_actionRedemarrer_la_maquette_triggered();
         void on_actionGestion_des_composants_I2C_triggered();
         void on_envoieProfil(QString ProfilActif);
         void on_actionDemarrerServeurWeb_triggered();
         void on_actionArreterServeurWeb_triggered();
-        void on_actionSV_triggered();
         void on_actionVueGlobale_triggered();
         void on_actionA_propos_triggered();
 };

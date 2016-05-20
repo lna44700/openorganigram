@@ -29,19 +29,16 @@ class f_ModifierProfil : public QDialog
     public :
         explicit f_ModifierProfil(QWidget *parent = 0) ;
         ~f_ModifierProfil() ;
-        void    Set_ProfilAModifier(QString ProfilAModifier) ;
-        void    ModifierProfil() ;
 
     protected :
 
     private :
         Ui::f_ModifierProfil * ui ;
-        QString ProfilAModifier ;       //Contient le nom du profil à modifier
 
     private slots:
         void on_BtBx_Valider_rejected() ;
         void on_BtBx_Valider_accepted() ;
-        void on_LE_AncienMdP_textChanged();
+        void on_LE_AncienMdP_editingFinished();
+        void on_LE_AncienMdP_textChanged(const QString &arg1);
 };
-
 #endif // F_MODIFIERPROFIL_H

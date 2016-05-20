@@ -56,7 +56,7 @@ class Item : public QGraphicsItem
         void            Modifier() ;        //Ouvrira une fenetre de modification
         void            Supprimer() ;
         QRectF          rect ;              //Rectangle dans lequel s'affichera l'item
-        QString         sTexte ;            //Texte à afficher dnas l'item
+        QString         sTexte ;            //Texte à afficher dans l'item
         Item *          pItemPrec ;         //L'item précédent celui ci
         QPointF         PosDebutDrag;
 

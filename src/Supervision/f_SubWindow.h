@@ -14,6 +14,7 @@ class f_SubWindow;
 #include "Widgets/WidgetNI.h"
 #include "Widgets/WidgetNO.h"
 #include "Widgets/WidgetAI.h"
+#include "Widgets/WidgetMOT1.h"
 
 class f_SubWindow : public QMdiSubWindow
 {

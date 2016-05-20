@@ -254,6 +254,9 @@
    </widget>
   </widget>
   <widget class="QDockWidget" name="DockSV">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="sizePolicy">
     <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
      <horstretch>0</horstretch>
@@ -623,10 +626,10 @@
      <normaloff>:/Images/App/VueGlobale-48.png</normaloff>:/Images/App/VueGlobale-48.png</iconset>
    </property>
    <property name="text">
-    <string>VueGlobale</string>
+    <string>Vue globale</string>
    </property>
    <property name="toolTip">
-    <string>VueGlobale</string>
+    <string>Vue globale</string>
    </property>
   </action>
  </widget>

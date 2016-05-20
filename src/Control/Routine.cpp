@@ -106,7 +106,7 @@ void Routine::AjouterInstruction(TypeCommande Type, unsigned int nIdPrecedent, b
         nSortie = 1 ;
     }
 
-    //Récupération de l'instruction suivantes
+    //Récupération de l'instruction suivante
     pSuivant = this->ListeInst[nListeIdSuivants[nSortie]] ;
 
     //Récupération de la liste des instructions précédant de la suivante

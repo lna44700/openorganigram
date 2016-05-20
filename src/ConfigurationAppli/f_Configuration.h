@@ -1,4 +1,4 @@
-// Configuration.h     1.0     25.02   Jonathan Aubry
+// Configuration.h     2.0 20/04/2016 Guitton Lucas
 
 #ifndef __CONFIGURATION_H
 #define __CONFIGURATION_H

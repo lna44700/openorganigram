@@ -45,7 +45,7 @@
    <property name="title">
     <string>Choix profil</string>
    </property>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>40</x>
@@ -67,11 +67,14 @@
        <property name="inputMethodHints">
         <set>Qt::ImhNoPredictiveText</set>
        </property>
+       <property name="maxLength">
+        <number>16</number>
+       </property>
       </widget>
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>60</x>
@@ -89,11 +92,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="Cb_Bx_Profil"/>
+      <widget class="QComboBox" name="CBx_Profil"/>
      </item>
     </layout>
    </widget>
-   <widget class="QLabel" name="L_Logo">
+   <widget class="QLabel" name="Lb_Logo">
     <property name="geometry">
      <rect>
       <x>10</x>

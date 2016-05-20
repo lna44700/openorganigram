@@ -86,7 +86,7 @@ void Vue::Constructeur()
 }
 
 /**
- * Calcul les coordonnée réelle de l'item sur la scène en fonction des coordonnée dans le tableau et
+ * Calcul les coordonnées réelles de l'item sur la scène en fonction des coordonnée dans le tableau et
  * refait un rendu de la scene complete.
  *
  * @brief   Vue::getEcartementAbsolu(unsigned int nIdDepart)

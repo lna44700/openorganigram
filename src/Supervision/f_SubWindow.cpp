@@ -20,7 +20,7 @@
 
 //=====   En-Têtes Personnels   =====
 #include "f_SubWindow.h"
-#include "f_Supervision.h"
+//#include "f_Supervision.h"
 
 
 
@@ -66,5 +66,5 @@ TypeFenetreSup f_SubWindow::getType()
 void f_SubWindow::EnvoyerDonneesSubW(QString Commande)
 {
     QObject * ZoneMDI (this->parent()->parent()) ;
-    qobject_cast<f_Supervision *>(ZoneMDI->parent())->EnvoyerDonneesSup(Commande);
+    //qobject_cast<f_Supervision *>(ZoneMDI->parent())->EnvoyerDonneesSup(Commande);
 }

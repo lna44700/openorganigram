@@ -5,12 +5,6 @@
 
 
 //Includes QT
-#ifndef QT_NO_OPENSSL
-    #include <QSslSocket>
-    #include <QSslKey>
-    #include <QSslCertificate>
-    #include <QSslConfiguration>
-#endif
 #include <QDir>
 
 //Includes Perso
@@ -22,8 +16,7 @@ PoolGestionnaireConnexionHTTP::PoolGestionnaireConnexionHTTP(QSettings* parametr
     Q_ASSERT(parametres!=0);
     this->parametres=parametres;
     this->gestionnaireRequete=gestionnaireRequete;
-    this->sslConfiguration=NULL;
-    chargerSslConfig();
+
     minuteurNettoyage.start(parametres->value("nettoyerInterval",1000).toInt());
     connect(&minuteurNettoyage, SIGNAL(timeout()), SLOT(nettoyer()));
 }
@@ -36,7 +29,6 @@ PoolGestionnaireConnexionHTTP::~PoolGestionnaireConnexionHTTP()
     {
        delete gestionnaire;
     }
-    delete sslConfiguration;
     qDebug("PoolGestionnaireConnexionHTTP (%p): detruit", this);
 }
 
@@ -61,7 +53,7 @@ GestionnaireConnexionHTTP* PoolGestionnaireConnexionHTTP::getGestionnaireConnexi
         int gestionnaireConnexionMax=parametres->value("maxThreads",100).toInt();
         if (pool.count()<gestionnaireConnexionMax)
         {
-            gestionnaireDroits=new GestionnaireConnexionHTTP(parametres,gestionnaireRequete,sslConfiguration);
+            gestionnaireDroits=new GestionnaireConnexionHTTP(parametres,gestionnaireRequete);
             gestionnaireDroits->setOccupe();
             pool.append(gestionnaireDroits);
         }
@@ -92,64 +84,3 @@ void PoolGestionnaireConnexionHTTP::nettoyer()
     mutex.unlock();
 }
 
-
-void PoolGestionnaireConnexionHTTP::chargerSslConfig()
-{
-    // If certificate and key files are configured, then load them
-    QString sslKeyFileName=parametres->value("sslKeyFile","").toString();
-    QString sslCertFileName=parametres->value("sslCertFile","").toString();
-    if (!sslKeyFileName.isEmpty() && !sslCertFileName.isEmpty())
-    {
-        #ifdef QT_NO_OPENSSL
-            qWarning("PoolGestionnaireConnexionHTTP: SSL n'est pas supporte");
-        #else
-            // Convert relative fileNames to absolute, based on the directory of the config file.
-            QFileInfo configFile(parametres->fileName());
-            #ifdef Q_OS_WIN32
-                if (QDir::isRelativePath(sslKeyFileName) && parametres->format()!=QSettings::NativeFormat)
-            #else
-                if (QDir::isRelativePath(sslKeyFileName))
-            #endif
-            {
-                sslKeyFileName=QFileInfo(configFile.absolutePath(),sslKeyFileName).absoluteFilePath();
-            }
-            #ifdef Q_OS_WIN32
-                if (QDir::isRelativePath(sslCertFileName) && parametres->format()!=QSettings::NativeFormat)
-            #else
-                if (QDir::isRelativePath(sslCertFileName))
-            #endif
-            {
-                sslCertFileName=QFileInfo(configFile.absolutePath(),sslCertFileName).absoluteFilePath();
-            }
-
-            // Load the SSL certificate
-            QFile certFile(sslCertFileName);
-            if (!certFile.open(QIODevice::ReadOnly))
-            {
-                qCritical("PoolGestionnaireConnexionHTTP: ne peut pas ouvrir sslCertFile %s", qPrintable(sslCertFileName));
-                return;
-            }
-            QSslCertificate certificate(&certFile, QSsl::Pem);
-            certFile.close();
-
-            // Load the key file
-            QFile keyFile(sslKeyFileName);
-            if (!keyFile.open(QIODevice::ReadOnly))
-            {
-                qCritical("PoolGestionnaireConnexionHTTP: ne peut pas ouvrir sslKeyFile %s", qPrintable(sslKeyFileName));
-                return;
-            }
-            QSslKey sslKey(&keyFile, QSsl::Rsa, QSsl::Pem);
-            keyFile.close();
-
-            // Create the SSL configuration
-            sslConfiguration=new QSslConfiguration();
-            sslConfiguration->setLocalCertificate(certificate);
-            sslConfiguration->setPrivateKey(sslKey);
-            sslConfiguration->setPeerVerifyMode(QSslSocket::VerifyNone);
-            sslConfiguration->setProtocol(QSsl::TlsV1SslV3);
-
-            qDebug("PoolGestionnaireConnexionHTTP: Parametres SSL charge");
-         #endif
-    }
-}

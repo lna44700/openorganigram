@@ -17,9 +17,8 @@ class f_MainWindow;
 #include "Interface/BtnItem.h"
 #include "Interface/Arduino.h"
 #include "Interface/InterpreteurFichierIni.h"
-//#include "SupervisionWeb/ServeurHTTPThread.h"
 #include "SupervisionWeb/Serveur/Serveur.h"
-#include "SupervisionWeb/Web/src/AfficherDonnees.h"
+#include "SupervisionWeb/Web/src/Donnees.h"
 
 typedef struct {
     unsigned char ProjetOuvert : 1 ;
@@ -47,6 +46,10 @@ class f_MainWindow : public QMainWindow
 
         void            Click_BtnItem(TypeCommande Type);       //Gestion d'un clic simple sur le bouton à gauche
         inline Arduino* getArduino()    { return pArduino ; }   //Accesseur de la connesion arduino
+        void            MasquerStopServeurWeb();
+        QTimer*            pTimerRafraichissement;
+        bool get_EtatTimer();
+
 
     protected:
         void        closeEvent(QCloseEvent *    pEvent) ;   //Gestion de l'évenement de fermeture
@@ -63,11 +66,12 @@ class f_MainWindow : public QMainWindow
         BtnItem *               pBt_ItemDock[8] ;           //8 boutons dockés sur le côté pour ajouter les items organigramme1
         Arduino *               pArduino ;                  //Connexion à l'arduino
         QLabel *                pEtatConnexion ;            //Label rendant compte de l'état de la connexion
-//		ServeurHTTPThread       ServeurWeb;                 //Serveur web pour supervision
         QByteArray              ConfigurationArduinoCourante;//Configuration acutellement chargée dans le logiciel
         Ui::f_MainWindow *      ui ;                        //Objet d'interface graphique
         Serveur                 serveurWeb;
-        AfficherDonnees         DonneesWeb;
+        Donnees    *            DonneesWeb;
+        QTimer*                 pTimerWeb;
+        bool                    bEtatTimer;
 
         //===== METHODES PRIVEES =====
         void InitialiserGestionProjet() ;
@@ -123,6 +127,7 @@ class f_MainWindow : public QMainWindow
         void on_actionDemarrerServeurWeb_triggered();
         void on_actionArreterServeurWeb_triggered();
         void on_actionA_propos_triggered();
+        void on_EnvoieEtatServeur(bool EtatServeur);
 };
 
 #endif // F_MAINWINDOW_H

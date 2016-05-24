@@ -9,13 +9,14 @@ class Arduino ;
 #include <QTime>
 #include <QTimer>
 #include <QQueue>
+#include <QSemaphore>
 
 //===PERSONNEL===//
 #include "./LibSerialPort/qextserialenumerator.h"
 #include "./LibSerialPort/qextserialport.h"
 #include"../TypeCommun.h"
 #include "../Supervision/f_Supervision.h"
-#include "SupervisionWeb/Web/src/AfficherDonnees.h"
+#include "SupervisionWeb/Web/src/Donnees.h"
 
 
 
@@ -26,6 +27,7 @@ class Arduino : public QObject
 
     public :
         explicit Arduino    (QObject *parent = 0) ;
+                 //QextSerialPort *            PortSerie ;
                  void       Connecter(QString sNomPort) ;                                   //Methode de connexion avec en paramètre le nom du port
                  void       Deconnecter() ;                                                 //Méthode de déconnexion
                  void       DemanderEtat() ;                                                //Demande d'état de la maquette
@@ -33,6 +35,11 @@ class Arduino : public QObject
                  void       AnnulerDerniereCommande(EmetteurCommande Emetteur);
                             ~Arduino() ;
                  void       RemplirQueueSupervisionWeb(QByteArray QueueRetour) ;
+                 int        LireCapteur(QString Commande);
+                 QSemaphore          *Semaphore;
+                 QextSerialPort *            PortSerie ;                             //L'objet représentant le port
+
+
 
     public slots :
                  bool       EnvoyerDonnees(QString sCommande, EmetteurCommande Emetteur) ;    //Slot public d'émission des données avec la commande et l'émetteur
@@ -51,12 +58,12 @@ class Arduino : public QObject
                 void        RetourCommandeSupervision(QByteArray ValeurRetourSup) ;        //Signal de retour de commande pour la Supervision
                 void        RetourCommandeOrganigram(QByteArray ValeurRetourOrg) ;         //Signal de retour de commande pour l'Organigram
                 void        Signal_Temps(QTime Incrementation) ;                           //Signal du temps de connection de l'Arduino
-                void        RetourCommandeSupervisionWEB(QQueue<QString> QueueRetourCommandeSupWeb) ;    //Signal de retour de commande pour la supervison WEB
+                void        RetourCommandeSupervisionWEB(QByteArray ValeurRetourSupWeb) ;
+             // void        RetourCommandeSupervisionWEB(QQueue<QString> QueueRetourCommandeSupWeb) ;    //Signal de retour de commande pour la supervison WEB
                 void        RetourCommandeGenerale(QByteArray ValeurRetourGen);
 
     private :
                 QByteArray                  Tampon ;                                //Tampon qui va permettre le stockage de la reception de la lecture
-                QextSerialPort *            PortSerie ;                             //L'objet représentant le port
                 QTimer *                    pCompteur ;                             //Timer de detection
                 QTime                       DureeDeConnexion ;                      //Incrémenter pour la durée de connexion
                 QQueue<EmetteurCommande>    FileEmetteur ;                          //File d'attente des émetteurs
@@ -64,6 +71,8 @@ class Arduino : public QObject
                 QByteArray                  RetourSim;
                 bool                        bArduinoUtilisable;                     //Définit si l'arduino est utilisable ou non
                 QQueue<QString>             QueueValeurCommandeSupW ;
+                QByteArray                  RetourLecturePort;
+                QextSerialPort *            PortSerie2 ;                             //L'objet représentant le port
 
 };
 

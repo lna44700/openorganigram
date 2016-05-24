@@ -35,7 +35,7 @@ class f_Supervision : public QWidget
 
     protected:
         virtual     void            showEvent(QShowEvent * e);
-        virtual     void            hideEvent(QHideEvent *e);
+        virtual     void            hideEvent(QHideEvent * e);
 
     private slots:
                     void            RetourCommande(QByteArray ValeurRetour);

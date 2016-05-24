@@ -14,6 +14,8 @@ class f_Configuration ;
 * Inclusion des fichiers EN-TÊTE
 */
 #include <QDialog>
+#include "SupervisionWeb/Serveur/Serveur.h"
+#include "f_MainWindow.h"
 
 
 /*
@@ -30,7 +32,7 @@ class f_Configuration : public QDialog
 
     public :
         // Constructeur
-        explicit f_Configuration(QWidget *parent = 0) ;
+        explicit f_Configuration(Serveur * pServeur, QWidget *  parent = 0) ;
 
         // Destructeur
         ~f_Configuration() ;
@@ -44,9 +46,14 @@ class f_Configuration : public QDialog
     private :
 
         Ui::f_Configuration * ui ;
-
+        //ServeurWeb pointeur
+        Serveur * ServeurWeb;
+        //MainWindow
+        f_MainWindow MainWindow;
         //Contient le numéro de port enregistrer par l'utilisateur
-        QString NumeroPort ;
+        QString sNumeroPort ;
+        //Contient le taux de rafraissement de la page Supervision.html
+        QString sTauxRafraichissementPage ;
 
 
     private slots :
@@ -55,6 +62,9 @@ class f_Configuration : public QDialog
 
         // Méthode de validation
         void on_Bt_Validation_accepted();
+
+signals:
+        EnvoieEtatServeur(bool EtatServeur);
 };
 
 #endif // __CONFIGURATION_H

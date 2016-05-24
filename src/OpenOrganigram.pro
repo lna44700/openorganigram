@@ -96,7 +96,7 @@ SOURCES += main.cpp\
     Control/ModInst/f_ModInst_EP.cpp \
     SupervisionWeb/Serveur/RequeteMapper.cpp \
     SupervisionWeb/Serveur/Serveur.cpp \
-    SupervisionWeb/Web/src/AfficherDonnees.cpp
+    SupervisionWeb/Web/src/Donnees.cpp
 
 
 HEADERS  += f_MainWindow.h \
@@ -176,7 +176,7 @@ HEADERS  += f_MainWindow.h \
     Control/ModInst/f_ModInst_EP.h \
     SupervisionWeb/Serveur/RequeteMapper.h \
     SupervisionWeb/Serveur/Serveur.h \
-    SupervisionWeb/Web/src/AfficherDonnees.h
+    SupervisionWeb/Web/src/Donnees.h
 
 FORMS    += f_MainWindow.ui \
     Interface/f_InterpreteurCommandes.ui \

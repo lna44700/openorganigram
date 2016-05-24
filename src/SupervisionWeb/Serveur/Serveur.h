@@ -17,16 +17,15 @@ public:
     Serveur();
     ~Serveur();
     void lancerServeur();
-    void stopperServeur();
-    void close();
+    void stopperServeur();                              
+    bool get_EtatServeur();             //Teste si le serveur est sauvé ou non
 
 private:
-    QTcpSocket* socket;
+   // QTcpSocket* socket;
     EcouteHTTP* listener;
 
 
-private slots:
-
+    bool bEtatServeur;
 
 };
 

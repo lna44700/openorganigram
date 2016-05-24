@@ -23,6 +23,9 @@
 //=====   En-Têtes standards    =====
 #include <QDebug>
 #include <iostream>
+#include <semaphore.h>
+#include <unistd.h>
+
 using namespace std ;
 
 
@@ -37,6 +40,7 @@ Arduino::Arduino(QObject *parent) :
     QObject(parent),
     Tampon(0),
     PortSerie(0),
+    Semaphore(NULL),
     pCompteur(0)
 {
     // Timer de l'arduino
@@ -45,6 +49,7 @@ Arduino::Arduino(QObject *parent) :
     connect(this->pCompteur,SIGNAL(timeout()),this, SLOT(Detecter())) ;     //Lorsque le temps est atteint, on lance Detecter()
     this->pCompteur->start() ;                                              //On lance le Timer
     this->DureeDeConnexion.setHMS(0, 0, 0, 0) ;                             //On initialise le compteur de temps de connexion à 0
+    this->Semaphore = new QSemaphore (1);
 }
 
 /**   Destructeur de la classe Arduino, le port est fermé, détruit,
@@ -55,19 +60,29 @@ Arduino::~Arduino()
 {
     if(this->PortSerie != 0)                                                               //Si le port existe
     {
-        this->PortSerie->close() ;                                                         //On le ferme
+
+        this->Semaphore->acquire(1);
+        this->PortSerie->close() ; //On le ferme
+        this->Semaphore->release(1);
         disconnect(this->PortSerie, SIGNAL(readyRead()), this, SLOT(RecevoirDonnees())) ;  //On deconnecte le signal de lecture
         delete this->PortSerie ;                                                           //On supprime le port
+        this->PortSerie      = NULL ;                                                             //On l'initialise à 0
     }
     if (this->pSimulation !=0)
     {
         delete this->pSimulation ;
         this->pSimulation=0 ;
     }
-    this->PortSerie      = 0 ;                                                             //On l'initialise à 0
     delete this->pCompteur ;                                                               //On supprime le compteur
     this->pCompteur      = 0 ;                                                             //On l'initialise à 0
     this->RetourSim= "" ;
+
+    if (this->Semaphore !=NULL)
+    {
+        delete this->Semaphore ;
+        this->Semaphore=NULL ;
+    }
+
 }
 
 void Arduino::setSimulation(f_Supervision* pSup)
@@ -92,11 +107,13 @@ void Arduino::AnnulerDerniereCommande(EmetteurCommande Emetteur)
  **/
 void Arduino::RecevoirDonnees()
 {
+    QByteArray Donnees ;
 
-    QByteArray Donnees = PortSerie->readAll() ;              //Lecture de l'Arduino et stockage dans un QByteArray
+    this->Semaphore->acquire(1);
+    Donnees = PortSerie->readAll() ;              //Lecture de l'Arduino et stockage dans un QByteArray
+    this->Semaphore->release(1);
 
     this->RemplirTampon(Donnees) ;                           //On envoie le retour de la lecture dans la mémoire tampon
-
 }
 
 /**     Elle permet de stocker la totalité du message de retour
@@ -134,8 +151,8 @@ void Arduino::RemplirTampon(QByteArray Tableau)
                     switch(this->FileEmetteur.dequeue())                //Permet de différencier le type de retour
                     {
                     case SUPW :
-                        //emit RetourCommandeSupervisionWEB(DebutTampon); //Retour de commande pour la supervision Web
-                        RemplirQueueSupervisionWeb(DebutTampon) ;
+                        emit RetourCommandeSupervisionWEB(DebutTampon); //Retour de commande pour la supervision Web
+                        //RemplirQueueSupervisionWeb(DebutTampon) ;
                         break;
 
                     case ORG :
@@ -162,7 +179,7 @@ void Arduino::RemplirTampon(QByteArray Tableau)
             else
             {
                 this->Tampon.clear() ;                              //Sinon on vide le Tampon
-                emit RetourCommandeSupervisionWEB(QueueValeurCommandeSupW) ;
+                //emit RetourCommandeSupervisionWEB(QueueValeurCommandeSupW) ;
             }
         }
     }
@@ -188,7 +205,9 @@ bool Arduino::EnvoyerDonnees(QByteArray sCommande, EmetteurCommande Emetteur)
     if (this->bArduinoUtilisable)                                                   // Si le port de l'Arduino existe
     {
         qint64 nReponse (0) ;                                                       //Déclaration de la réponse de l'écriture
+        this->Semaphore->acquire(1);
         nReponse = this->PortSerie->write(sCommande) ;                              //On envoie la commande et on range le retour dans nReponse
+        this->Semaphore->release(1);
 
         if(nReponse != -1)                                                         //Si il n'y a pas d'erreur
         {
@@ -252,10 +271,13 @@ void Arduino::Detecter()
         {
             this->DureeDeConnexion = this->DureeDeConnexion.addMSecs(10) ; //On incrémente le compteur de 10 ms
 
+            this->Semaphore->acquire(1);
             if(!this->PortSerie->isOpen())                           //Si le port n'est pas ouvert
             {
                 this->PortSerie->open(QextSerialPort::ReadWrite) ;   //On l'ouvre en lecture et écriture
             }
+            this->Semaphore->release(1);
+
         }
     }
     else
@@ -275,11 +297,12 @@ void Arduino::Detecter()
  **/
 void Arduino::Connecter(QString sNomPort)
 {
+
     //qDebug() << "Connexion :" ;                                                //On essaie de faire la connexion avec la carte Arduino
     bool bOuverture (false) ;                                                    //Booléen qui va détecter l'ouverture
 
 
-    this->PortSerie = new QextSerialPort() ;                                     //On créé le port
+    this->PortSerie = new QextSerialPort ;                                     //On créé le port
 
     this->PortSerie->setPortName(sNomPort) ;                                     //On lui applique le port COM passé en paramètre
     this->PortSerie->setBaudRate(BAUD9600) ;                                     // On règle la vitesse du port
@@ -289,7 +312,9 @@ void Arduino::Connecter(QString sNomPort)
     this->PortSerie->setFlowControl(FLOW_OFF) ;                                  // Pas de contrôle de flux
 
 
-    bOuverture = this->PortSerie->open(QextSerialPort::ReadWrite) ;              // Ouverture du port en écriture et lecture
+    this->Semaphore->acquire(1);
+    bOuverture = this->PortSerie->open(QextSerialPort::ReadWrite) ;      // Ouverture du port en écriture et lecture
+    this->Semaphore->release(1);
     if(!bOuverture)                                                              // Test d'ouverture du port
     {
         emit ArduinoConnect(PORT_FERME, sNomPort) ;                              //On émet que le port est fermé avec son nom
@@ -304,6 +329,7 @@ void Arduino::Connecter(QString sNomPort)
     connect(this->PortSerie,SIGNAL(readyRead()),this,SLOT(RecevoirDonnees())) ;  //Lorsque le port série est prêt à lire, on exécute RecevoirDonnees
 
     QTimer::singleShot(2000, Qt::CoarseTimer, this, SLOT(UtiliserArduino()));    //On appel une seule fois UtiliserArduino() au bout de 2 s
+
 }
 
 void Arduino::UtiliserArduino()
@@ -323,14 +349,19 @@ void Arduino::Deconnecter()
     if(this->PortSerie != 0)                                                                //Si le port série n'est pas nul(Fermé, utilisé dans une autre application par exemple)
     {
         //qDebug() << "Deconnexion" ;                                                       //On affiche que l'on va le déconnecter
+        this->Semaphore->acquire(1);
+
         this->PortSerie->close() ;                                                          //On ferme le port
+        this->Semaphore->release(1);
+
         disconnect(this->PortSerie, SIGNAL(readyRead()), this, SLOT(RecevoirDonnees())) ;   //On déconnecte les signaux précédents
         delete this->PortSerie ;                                                            //On supprime le port
     }
+    emit ArduinoConnect(DECONNECTE, "") ;                                                   //On émet que l'Arduino est déconnecté
 
     this->bArduinoUtilisable = false;                                                       //On dit que l'Arduino n'est pas utilisable
 
-    this->PortSerie = 0 ;                                                                   //On initialise le port à 0
+    this->PortSerie = 0 ;
 }
 
 /**     Elle permet d'émettre l'état de l'Arduino
@@ -368,4 +399,87 @@ void Arduino::RemplirQueueSupervisionWeb(QByteArray QueueRetour)
     }*/
 
     QueueValeurCommandeSupW.enqueue(QueueRetour);
+}
+
+
+int Arduino::LireCapteur(QString Commande)
+{
+
+    this->Semaphore->acquire(1);
+    QByteArray RetourLecturePort("");
+    QString DonneesLues("");
+    int Retour(0);
+
+    qDebug() << "LE Sémaphore EST OK " ;
+
+    //Acquisition du sémaphore
+
+    qDebug() << "Port série " << (int)this->PortSerie ;
+    qDebug() << "Sémaphore " << (int)this->Semaphore ;
+
+
+    this->PortSerie->write(Commande.toStdString().c_str());
+    qDebug() << "Write Ok" ;
+
+
+    while(RetourLecturePort.right(1) != "\n")
+    {
+        //usleep(1000); // 200 ms
+        RetourLecturePort += this->PortSerie->readAll();
+    }
+
+
+    qDebug() << RetourLecturePort;
+
+    DonneesLues += RetourLecturePort.toStdString().c_str();
+
+    qDebug() << DonneesLues;
+
+    DonneesLues = DonneesLues.remove(0,6);      //On supprime les 6 premiers caractères (VALUE=)
+    DonneesLues.resize(DonneesLues.size()-2);   //On supprime les deux derniers caractères (\r\n)
+
+    //Si l'entrée est de type jack, on renvoie la valeur maintenant
+    //La valeur de retour est un entier
+    Retour = DonneesLues.toInt(0,10);
+
+    //Si l'entrée est de type I2C (si la commande commence par 'i'), la donnée à interpréter est sur deux octets,
+    //il faut donc calculer la valeur décimale en fonction du poids fort et du poids faible
+    if(Commande[0] == 'i')
+    {
+        QString CopieDonneesLues  ("");
+        unsigned char PoidsFort   (0);
+        unsigned char PoidsFaible (0);
+
+        //On copie la variable DonneesLues
+        CopieDonneesLues = DonneesLues;
+
+        //On redimentionne la variable pour vérifier si elle commence par le caractère '-',
+        //afin de savoir si une sonde à été détectée ou non
+        DonneesLues.resize(1);
+
+        //Retourne la valeur -1 si aucun capteur n'est détecté sur le BUS I2C à l'adresse passée en paramètre
+        if(DonneesLues == "-")
+        {
+            Retour = (-1);
+        }
+        else
+        {
+            //Si le caractère n'est pas '-', alors il s'agit de l'octet de poids fort, qu'on met dans une variable
+            PoidsFort = DonneesLues.toInt(0,10);
+
+            //On utilise la variable de copie pour récupérer l'octet de poids faible
+            //On supprime les deux premiers caractères (le caractère correspondant au poids fort et la virgule)
+            CopieDonneesLues = CopieDonneesLues.remove(0,2);
+
+            //On met le poids faible dans une variable
+            PoidsFaible = CopieDonneesLues.toInt(0,10);
+
+            //On renvoie la valeur décimale
+            Retour = ((PoidsFort*256)+PoidsFaible);
+        }
+    }
+    this->Semaphore->release(1);
+
+    return Retour;
+
 }

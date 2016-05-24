@@ -52,10 +52,8 @@ public:
       Constructeur.
       @param settings Configuration settings of the HTTP webserver
       @param requestHandler Handler that will process each incoming HTTP request
-      @param sslConfiguration SSL (HTTPS) will be used if not NULL
     */
-    GestionnaireConnexionHTTP(QSettings* parametres, GestionnaireRequeteHTTP* gestionnaireRequete, QSslConfiguration* sslConfiguration=NULL);
-
+    GestionnaireConnexionHTTP(QSettings* parametres, GestionnaireRequeteHTTP* gestionnaireRequete);
     /** Destructeur */
     virtual ~GestionnaireConnexionHTTP();
 
@@ -85,13 +83,10 @@ private:
     /** Cela montre l'état occupé à une époque très tôt */
     bool occupe;
 
-    /** Configuration pour SSL */
-    QSslConfiguration* sslConfiguration;                        //A virer !
-
     /** Exécute la propre boucle d'événements threads */
     void run();
 
-    /**  Creer SSL ou TCP socket */
+    /**  Creer TCP socket */
     void creerSocket();
 
     void supprimerSocket();

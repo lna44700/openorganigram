@@ -8,18 +8,17 @@
 #include "GestionnaireConnexionHTTP.h"
 #include "ReponseHTTP.h"
 
-GestionnaireConnexionHTTP::GestionnaireConnexionHTTP(QSettings* parametres, GestionnaireRequeteHTTP* gestionnaireRequete, QSslConfiguration* sslConfiguration)
+GestionnaireConnexionHTTP::GestionnaireConnexionHTTP(QSettings* parametres, GestionnaireRequeteHTTP* gestionnaireRequete)
     : QThread()
 {
     Q_ASSERT(parametres!=0);
     Q_ASSERT(gestionnaireRequete!=0);
     this->parametres=parametres;
     this->gestionnaireRequete=gestionnaireRequete;
-    this->sslConfiguration=sslConfiguration;
     requeteActuelle=0;
     occupe=false;
 
-    // Créer TCP ou socket SSL
+    // Créer TCP
     creerSocket();
 
     // exécuter des signaux dans mon propre thread
@@ -48,18 +47,7 @@ GestionnaireConnexionHTTP::~GestionnaireConnexionHTTP()
 
 void GestionnaireConnexionHTTP::creerSocket()
 {
-    // Si SSL est pris en charge et configuré, créer une instance de QSslSocket
-    #ifndef QT_NO_OPENSSL
-        if (sslConfiguration)
-        {
-            QSslSocket* sslSocket=new QSslSocket();
-            sslSocket->setSslConfiguration(*sslConfiguration);
-            socket=sslSocket;
-            qDebug("GestionnaireConnexionHTTP (%p): SSL est activé", this);
-            return;
-        }
-    #endif
-    // d'autre créer une instance de QTcpSocket
+    // créer une instance de QTcpSocket
     socket=new QTcpSocket();
 }
 
@@ -102,16 +90,6 @@ void GestionnaireConnexionHTTP::gestionConnexion(tSocketDescriptor socketDescrip
         qCritical("GestionnaireConnexionHTTP (%p): ne peut initialiser socket: %s", this,qPrintable(socket->errorString()));
         return;
     }
-
-    #ifndef QT_NO_OPENSSL
-        // Allumez le cryptage, si SSL est configuré
-        if (sslConfiguration)
-        {
-            qDebug("GestionnaireConnexionHTTP (%p): Démarrage du chiffrement", this);
-            ((QSslSocket*)socket)->startServerEncryption();
-        }
-    #endif
-
     // Démarrer minuterie pour le delai d'attente
     int readTimeout=parametres->value("readTimeout",10000).toInt();
     lireTimer.start(readTimeout);

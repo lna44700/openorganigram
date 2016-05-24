@@ -25,18 +25,6 @@
     le nombre de threads inactifs lentement en fermant un thread dans chaque intervalle.
     Mais le nombre maximum configuré de thread sont tenus au cours d'exécution.
 
-    Pour le support SSL, j'ai besoin d'un fichier de certificat OpenSSL et d'un fichier de clé.
-    Les deux peuvent être créés avec la commande suivante :
-
-    openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout my.key -out my.cert
-
-    Visitez http://slproweb.com/products/Win32OpenSSL.html pour télécharger
-    la version Light de OpenSSL pour Windows.
-
-    Attention ! Un écouteur avec paramêtres SSL ne peut gérer le protocole HTTPS.
-    Pour prendre en charge les protocoles HTTP et HTTPS simultanément, je dois
-    commencer à deux auditeurs sur des ports différents - une avec ALL et un sans SSL.
-
   @see f_GestionnaireConnexionHTTP pour la description de ReadTimeout
   @see f_RequeteHTTP pour la description de config paramètres MaxRequestSize et maxMultiPartSize
 */
@@ -76,12 +64,6 @@ private:
 
     /** Utilisé pour synchroniser les threads */
     QMutex mutex;
-
-    /** La configuration de SSL (certificat, clé et autres paramètres) */
-    QSslConfiguration* sslConfiguration;
-
-    /** Charger configuration SSL */
-    void chargerSslConfig();
 
 private slots:
 

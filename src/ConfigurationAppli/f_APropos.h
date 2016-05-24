@@ -1,4 +1,4 @@
-// f_ChoixProfil.h     1.0     01/03/2016   Guitton Lucas
+// f_APropos.h     1.0     01/03/2016
 
 #ifndef __APropos_H
 #define __APropos_H

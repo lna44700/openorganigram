@@ -30,8 +30,6 @@
     maxThreads=10
     cleanupInterval=1000
     readTimeout=60000
-    ;sslKeyFile=ssl/my.key
-    ;sslCertFile=ssl/my.cert
     maxRequestSize=16000
     maxMultiPartSize=1000000
 
@@ -40,7 +38,7 @@
     Le numéro de port spécifie le port TCP entrant que cet interlocuteur écoute.
 
     @see f_[Pool]GestionnaireConnexionHTTP pour la description des paramètres de
-    configuration minThreads, maxThreads, CleanupInterval et ssl paramètres de cet
+    configuration minThreads, maxThreads, CleanupInterval de cet
     interlocuteur d'écoute.
     @see f_GestionnaireConnexionHTTP pour la description de ReadTimeout
     @see f_RequeteHTTP pour la description des paramètres de configuration MaxRequestSize

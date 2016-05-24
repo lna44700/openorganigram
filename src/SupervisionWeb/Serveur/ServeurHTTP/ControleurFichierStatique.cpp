@@ -58,7 +58,7 @@ void ControleurFichierStatique::service(RequeteHTTP& requete, HttpReponse& repon
     else
     {
         mutex.unlock();
-        // The file is not in cache.
+        // Le fichier n'est pas dans le caches.
         qDebug("ControleurFichierStatique: Cache miss for %s",chemin.data());
         // Forbid access to files outside the www directory
         if (chemin.contains("/.."))
@@ -68,12 +68,12 @@ void ControleurFichierStatique::service(RequeteHTTP& requete, HttpReponse& repon
             reponse.ecrire("403 forbidden",true);
             return;
         }
-        // If the filename is a directory, append index.html.
+        // Si le nom du fichier est le directory -> index.html.
         if (QFileInfo(www+chemin).isDir())
         {
             chemin+="/index.html";
         }
-        // Try to open the file
+        // Essayez d'ouvrir le fichier
         QFile file(www+chemin);
         qDebug("ControleurFichierStatique: Open file %s",qPrintable(file.fileName()));
         if (file.open(QIODevice::ReadOnly))
@@ -82,7 +82,7 @@ void ControleurFichierStatique::service(RequeteHTTP& requete, HttpReponse& repon
             reponse.definirHeader("Cache-Control","max-age="+QByteArray::number(maxAge/1000));
             if (file.size()<=tailleFichierCacheMax)
             {
-                // Return the file content and store it also in the cache
+                // Retourne le contenu du fichier et le stocker aussi dans le cache
                 entry=new CacheEntry();
                 while (!file.atEnd() && !file.error())
                 {
@@ -98,7 +98,7 @@ void ControleurFichierStatique::service(RequeteHTTP& requete, HttpReponse& repon
             }
             else
             {
-                // Return the file content, do not store in cache
+                // Retourne le contenu du fichier, ne pas stocker dans le cache
                 while (!file.atEnd() && !file.error())
                 {
                     reponse.ecrire(file.read(65536));
@@ -109,14 +109,14 @@ void ControleurFichierStatique::service(RequeteHTTP& requete, HttpReponse& repon
         else {
             if (file.exists())
             {
-                qWarning("ControleurFichierStatique: Cannot open existing file %s for reading",qPrintable(file.fileName()));
+                qWarning("ControleurFichierStatique: Impossible d'ouvrir le fichier existant %s pour lecture",qPrintable(file.fileName()));
                 reponse.setStatus(403,"forbidden");
                 reponse.ecrire("Erreur 403 - Acces interdit !",true);
             }
             else
             {
                 reponse.setStatus(404,"not found");
-                reponse.ecrire("Erreur 404 - Fichier inexistant !",true);
+                reponse.ecrire("Erreur 404 - Fichier inexistant ! Essayer d'actualiser la page.",true);
             }
         }
     }
@@ -148,10 +148,6 @@ void ControleurFichierStatique::setTypeContenu(QString nomFichier, HttpReponse& 
     {
         reponse.definirHeader("Content-Type", qPrintable("text/html; charset="+codage));
     }
-   // else if (nomFichier.endsWith(".php"))
-   //{
-   //     reponse.definirHeader("Content-Type", qPrintable("text/php; charset="+codage));
-    //}
     else if (nomFichier.endsWith(".css"))
     {
         reponse.definirHeader("Content-Type", "text/css");

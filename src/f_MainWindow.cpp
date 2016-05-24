@@ -34,6 +34,7 @@
 #include <QStringRef>
 #include <QProgressBar>
 #include <QTemporaryFile>
+#include <QTimer>
 
 //=====   Headers Peros   =====
 #include "f_MainWindow.h"
@@ -61,7 +62,7 @@
 #include "GlobalHTTP.h"
 #include "SupervisionWeb/Serveur/RequeteMapper.h"
 #include "SupervisionWeb/Serveur/Serveur.h"
-#include "SupervisionWeb/Web/src/AfficherDonnees.h"
+#include "SupervisionWeb/Web/src/Donnees.h"
 
 /**
  * Constructeur de la fenêtre, cette methode met en place toute l'interface
@@ -78,16 +79,14 @@ f_MainWindow::f_MainWindow(QWidget *    pParent) :
     pStIt_ListeModules      (0) ,
     pArduino                (new Arduino),
     pEtatConnexion          (new QLabel),
-//	ServeurWeb              (),
-    ui                      (new Ui::f_MainWindow)//,
-    //DonneesWeb              (0)
-
+    ui                      (new Ui::f_MainWindow)
 {
 
     // Initialisation générale
     this->ui->setupUi(this) ;
     this->ui->actionInterpreteur->setShortcut(tr("ALT+F8"));
     f_Supervision * Sup (new f_Supervision(pArduino));
+    DonneesWeb = new Donnees(pArduino);
     this->ui->DockSV->setWidget(Sup);
     connect(this->ui->DockSV, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), Sup, SLOT(EmplacementSupervision(Qt::DockWidgetArea)));
     this->ui->DockSV->hide() ;
@@ -1011,8 +1010,9 @@ void f_MainWindow::ObtenirEmplacementProjet(bool bOuvrir)
 
 void f_MainWindow::OuvrirFenetreConfig()
 {
-    f_Configuration   f_Config  (this) ;
-
+    f_Configuration   f_Config  (&(this->serveurWeb), this) ;
+    QWidget::connect(&f_Config, SIGNAL(EnvoieEtatServeur(bool)),
+                     this, SLOT(on_EnvoieEtatServeur(bool)));
     f_Config.exec() ;
 }
 
@@ -1126,6 +1126,10 @@ void f_MainWindow::on_actionNouveau_triggered()
             this->EtatProjetenCours.Etat.ProjetEnregistre = 0;
             this->EtatProjetenCours.Etat.ProjetOuvert = 0;
         }
+        ui->actionArreterServeurWeb->setEnabled(false) ; // Le bouton arreter serveur se grise
+
+        ui->actionDemarrerServeurWeb->setEnabled(false);  // Le bouton démarrer serveur se dégrise
+
 
         AssistantConfiguration Wizard;
 
@@ -1632,23 +1636,66 @@ void f_MainWindow::on_envoieProfil(QString ProfilActif)
 
 void f_MainWindow::on_actionDemarrerServeurWeb_triggered()
 {
+    qDebug() << "Bouton masqué";
     this->ui->actionArreterServeurWeb->setEnabled(true) ; // Le bouton arreter se dégrise
+    qDebug() << "Bouton visible";
     this->ui->actionDemarrerServeurWeb->setEnabled(false) ; // Le bouton démarrer se grise
-
+    qDebug() << "Lancement du serveur ...";
     serveurWeb.lancerServeur(); // Lance le serveur Web
-    DonneesWeb.AfficherNomBroche(); // Affiche les données de la maquette dans la page web "Supervision.html"
+    qDebug() << "Serveur lancé";
+    this->pTimerWeb = new QTimer;
+    this->pTimerRafraichissement = new QTimer;
+
+    DonneesWeb->Timer();
+
+    DonneesWeb->Get_pTimer()->start(); // Affiche les données de la maquette dans la page web "Supervision.html"
+    //qDebug() << "Timer Ok";
+    bEtatTimer == true;
+    DonneesWeb->on_EcrireDonneesDansPageHTML();
+
 }
 
 
 
 void f_MainWindow::on_actionArreterServeurWeb_triggered()
 {
+    this->DonneesWeb->Get_pTimer()->stop();
+    this->pTimerWeb->stop();
+    delete this->pTimerWeb;
+    bEtatTimer == false;
+    //this->DonneesWeb->pTimerRafraichissement->stop();
     this->ui->actionArreterServeurWeb->setEnabled(false) ; // Le bouton arreter serveur se grise
     this->ui->actionDemarrerServeurWeb->setEnabled(true);  // Le bouton démarrer serveur se dégrise
     serveurWeb.stopperServeur(); // Le serveur se stop
+
 }
 
+void f_MainWindow::on_EnvoieEtatServeur(bool EtatServeur)
+{
+    if(EtatServeur ==  true)
+    {
+        this->ui->actionArreterServeurWeb->setEnabled(true) ; // Le bouton arreter se dégrise
+        this->ui->actionDemarrerServeurWeb->setEnabled(false) ; // Le bouton démarrer se grise
+    }
+    else
+    {
+        this->ui->actionArreterServeurWeb->setEnabled(false) ; // Le bouton arreter se dégrise
+        this->ui->actionDemarrerServeurWeb->setEnabled(true) ; // Le bouton démarrer se grise
+    }
+}
+
+/** Création de la fenêtre de configuration et ouverture
+ *
+ * @brief   f_MainWindow::OuvrirFenetreProfil()
+ * @see     f_Configuration
+*/
 void f_MainWindow::on_actionA_propos_triggered()
 {
     this->OuvrirFenetreAPropos(); ; // Ouvre la fenêtre "A propos" qui donne des infos sur l'application.
+}
+
+
+bool f_MainWindow::get_EtatTimer()
+{
+    return bEtatTimer;
 }

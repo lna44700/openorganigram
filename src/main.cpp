@@ -27,19 +27,12 @@
 #include "f_MainWindow.h"
 #include "ConfigurationAppli/f_ChoixProfil.h"
 #include "Interface/Arduino.h"
-#include "SupervisionWeb/Web/src/AfficherDonnees.h"
+#include "SupervisionWeb/Web/src/Donnees.h"
 
 
 int main(int argc, char *argv[])
 {
     QApplication    a  (argc, argv) ;
-
-//    f_ChoixProfil x (0) ;
-//    x.show();
     f_MainWindow    w  (0) ;
-//    QWidget::connect(&x, SIGNAL(EnvoieProfil(QString)),
-//                     &w, SLOT(on_envoieProfil(QString)));
-    //AfficherDonnees monTimer;
-
     return a.exec();
 }

@@ -26,35 +26,35 @@ class f_Supervision : public QWidget
     Q_OBJECT
 
     public :
-                    f_Supervision   (Arduino *pControleur,QWidget *parent = 0);
-                    void            EnvoyerDonneesSup(QString Commande);
-                    void            OuvrirFichierINI(QString sChemin );
-                    QByteArray      SimulerEnvoiDonnees(QByteArray Commande);
-                    void            PurgerListeFenetre();
-                                    ~f_Supervision();
+//                    f_Supervision   (Arduino *pControleur,QWidget *parent = 0);
+//                    void            EnvoyerDonneesSup(QString Commande);
+//                    void            OuvrirFichierINI(QString sChemin );
+//                    QByteArray      SimulerEnvoiDonnees(QByteArray Commande);
+//                    void            PurgerListeFenetre();
+//                                    ~f_Supervision();
 
     protected:
-        virtual     void            showEvent(QShowEvent * e);
-        virtual     void            hideEvent(QHideEvent *e);
+//        virtual     void            showEvent(QShowEvent * e);
+//       virtual     void            hideEvent(QHideEvent *e);
 
     private slots:
-                    void            RetourCommande(QByteArray ValeurRetour);
-                    void            EmplacementSupervision(Qt::DockWidgetArea Loc);
+//                    void            RetourCommande(QByteArray ValeurRetour);
+//                    void            EmplacementSupervision(Qt::DockWidgetArea Loc);
 
-                    void            on_BtAfficher_clicked() ;
-                    void            on_TempsFinit ();
-                    void            on_BtHorizontal_clicked();
-                    void            on_BtVertical_clicked();
+//                    void            on_BtAfficher_clicked() ;
+//                    void            on_TempsFinit ();
+//                    void            on_BtHorizontal_clicked();
+//                    void            on_BtVertical_clicked();
 
     private :
-                    Ui::f_Supervision *     ui ;
-                    QList<f_SubWindow *>    ListeFenetre ;
-                    Arduino*                pArduino ;
-                    QTimer                  CompteurSup ;
-                    QQueue<QString>         FileCommande ;
-                    int                     nIndiceFenetre ;
-                    unsigned int            Compteur ;
-                    bool                    bAttenteReponse ;
+//                    Ui::f_Supervision *     ui ;
+//                    QList<f_SubWindow *>    ListeFenetre ;
+//                    Arduino*                pArduino ;
+//                    QTimer                  CompteurSup ;
+//                    QQueue<QString>         FileCommande ;
+//                    int                     nIndiceFenetre ;
+//                    unsigned int            Compteur ;
+//                    bool                    bAttenteReponse ;
 };
 
 #endif // F_SUPERVISION_H

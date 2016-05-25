@@ -42,10 +42,6 @@ f_ModifierProfil::f_ModifierProfil(QWidget *parent) :
     ui->LE_NvMdP->setEchoMode(QLineEdit::Password);
     ui->LE_ConfirmMdP->setEchoMode(QLineEdit::Password);
 
-//    ui->LE_AncienMdP->setInputMask("NNNNNNNNNNNNNNNN");
-//    ui->LE_NvMdP->setInputMask("NNNNNNNNNNNNNNNN");
-//    ui->LE_ConfirmMdP->setInputMask("NNNNNNNNNNNNNNNN");
-
     this->setWindowTitle("Modifier le profil") ;
 }
 
@@ -146,11 +142,6 @@ void f_ModifierProfil::on_LE_AncienMdP_textChanged(const QString &arg1)
         ui->LE_ConfirmMdP->show();
         ui->Lb_ConfimMdP->show();
     }
-//    else
-//    {
-//        ui->Lb_AncienMdP->setStyleSheet("border: 2px solid red") ;
-//        ui->LE_AncienMdP->clear();
-//    }
 
     MotDePasseArray.remove(0, MotDePasseArray.size());
 }

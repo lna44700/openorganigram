@@ -220,7 +220,7 @@ bool Arduino::EnvoyerDonnees(QByteArray sCommande, EmetteurCommande Emetteur)
     {
         this->FileEmetteur.enqueue(Emetteur) ;                                  //On ajoute à la file le dernier émetteur
 
-        this->RetourSim = this->pSimulation->SimulerEnvoiDonnees(sCommande);    //Retour de commande pour la simulation
+        //this->RetourSim = this->pSimulation->SimulerEnvoiDonnees(sCommande);    //Retour de commande pour la simulation
         QTimer::singleShot(1, this, SLOT(RetourCommandeSimulation()));          //On appelle une seule fois au bout de 1s RetourCommandeSimulation()
 
         bRetour = true ;                                                        //On met bRetour à TRUE

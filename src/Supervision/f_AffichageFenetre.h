@@ -18,11 +18,11 @@ class f_AffichageFenetre : public QDialog
     Q_OBJECT
 
 public:
-    explicit f_AffichageFenetre(QList<f_SubWindow*> ListeFenetre, QWidget *parent = 0);
-    ~f_AffichageFenetre();
+//    explicit f_AffichageFenetre(QList<f_SubWindow*> ListeFenetre, QWidget *parent = 0);
+//    ~f_AffichageFenetre();
 
 private slots:
-    void slot_itemChanged(QStandardItem* item);
+//    void slot_itemChanged(QStandardItem* item);
 
 private:
     Ui::f_AffichageFenetre *ui;

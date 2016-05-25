@@ -38,7 +38,6 @@ class f_ModifierProfil : public QDialog
     private slots:
         void on_BtBx_Valider_rejected() ;
         void on_BtBx_Valider_accepted() ;
-        void on_LE_AncienMdP_editingFinished();
         void on_LE_AncienMdP_textChanged(const QString &arg1);
 };
 #endif // F_MODIFIERPROFIL_H

@@ -1,5 +1,5 @@
 #include "f_AffichageFenetre.h"
-#include "ui_f_AffichageFenetre.h"
+//#include "ui_f_AffichageFenetre.h"
 
 f_AffichageFenetre::f_AffichageFenetre(QList<f_SubWindow *> ListeFenetre, QWidget *parent) :
     QDialog(parent),

@@ -22,58 +22,14 @@ include(SupervisionWeb/Serveur/ServeurHTTP/ServeurHTTP.pri)
 
 SOURCES += main.cpp\
         f_MainWindow.cpp \
-    Interface/BtnItem.cpp \
-    Interface/f_InterpreteurCommandes.cpp \
-    Control/Routine.cpp \
-    Control/Instruction.cpp \
-    Vue/Vue.cpp \
-    Vue/Scene.cpp \
-    Vue/Item.cpp \
-    Control/Inst/Inst_DebFin.cpp \
-    Vue/Item/Item_DebFin.cpp \
-    Vue/Item/Item_Ope.cpp \
-    Vue/Item/Item_Cond.cpp \
-    Vue/Item/Item_ES.cpp \
-    Vue/Item/Item_Rout.cpp \
-    Vue/Item/Item_Tempo.cpp \
-    Vue/Item/Item_Com.cpp \
-    ConfigurationMaquette/f_DefinirActionsEtTests.cpp \
-    ConfigurationMaquette/f_RealiserPlanCablage.cpp \
-    Supervision/f_SubWindow.cpp \
-    Supervision/f_Supervision.cpp \
     ConfigurationAppli/f_Configuration.cpp \
     ConfigurationAppli/f_CreerProfil.cpp \
     ConfigurationAppli/f_ChoixProfil.cpp \
     ConfigurationAppli/f_SupprimerProfil.cpp \
-    ConfigurationAppli/f_APropos.cpp \
-    Control/ModuleManager.cpp \
-    Control/Inst/Inst_Ope.cpp \
-    Control/ModInst/f_ModInst_Ope.cpp \
-    Control/Inst/Inst_Cond.cpp \
-    Control/ModInst/f_ModInst_Cond.cpp \
-    Control/Inst/Inst_ES.cpp \
-    Control/ModInst/f_ModInst_ES.cpp \
-    Control/Inst/Inst_Rout.cpp \
-    Control/ModInst/f_ModInst_Rout.cpp \
-    Supervision/f_WidgetInterne.cpp \
-    Vue/Fleche.cpp \
-    Interface/Arduino.cpp \
     ConfigurationAppli/f_ModifierProfil.cpp \
-    Control/Inst/Inst_Tempo.cpp \
-    Control/ModInst/f_ModInst_Tempo.cpp \
-    Control/Inst/Inst_Com.cpp \
-    Control/ModInst/f_ModInst_Com.cpp \
-    Vue/MarqueurDrop.cpp \
-    Control/Inst/Inst_Boucle.cpp \
-    Control/ModInst/f_ModInst_Boucle.cpp \
-    Vue/Item/Item_Boucle.cpp \
-    Interface/f_GestionMem.cpp \
-    Interface/InterpreteurFichierIni.cpp \
-    Interface/f_SaisieNom.cpp \
-    Interface/f_ConfigI2C.cpp \
-    Interface/f_Compilation.cpp \
-    Control/Compil_Inst.cpp \
-    Control/Compil_Rout.cpp \
+    ConfigurationAppli/f_APropos.cpp \
+    ConfigurationMaquette/f_DefinirActionsEtTests.cpp \
+    ConfigurationMaquette/f_RealiserPlanCablage.cpp \
     ConfigurationMaquette/AssistantConfiguration.cpp \
     ConfigurationMaquette/f_ChoixControleur.cpp \
     ConfigurationMaquette/f_ChoixInterface.cpp \
@@ -85,74 +41,73 @@ SOURCES += main.cpp\
     ConfigurationMaquette/RealiserPlanDeCablage/CapteurActionneur.cpp \
     ConfigurationMaquette/DefinirActionsEtTests/ItemActionTest.cpp \
     ConfigurationMaquette/DefinirActionsEtTests/f_EditerActionTest.cpp \
+    Control/Routine.cpp \
+    Control/Instruction.cpp \
+    Control/ModuleManager.cpp \
+    Control/Compil_Inst.cpp \
+    Control/Compil_Rout.cpp \
+    Control/Inst/Inst_Ope.cpp \
+    Control/ModInst/f_ModInst_Ope.cpp \
+    Control/Inst/Inst_Cond.cpp \
+    Control/ModInst/f_ModInst_Cond.cpp \
+    Control/Inst/Inst_ES.cpp \
+    Control/ModInst/f_ModInst_ES.cpp \
+    Control/Inst/Inst_Rout.cpp \
+    Control/ModInst/f_ModInst_Rout.cpp \
+    Control/Inst/Inst_Tempo.cpp \
+    Control/ModInst/f_ModInst_Tempo.cpp \
+    Control/Inst/Inst_Com.cpp \
+    Control/ModInst/f_ModInst_Com.cpp \
+    Control/Inst/Inst_Boucle.cpp \
+    Control/ModInst/f_ModInst_Boucle.cpp \
+    Control/Inst/Inst_EP.cpp \
+    Control/ModInst/f_ModInst_EP.cpp \
+    Control/Inst/Inst_DebFin.cpp \
+    Interface/BtnItem.cpp \
+    Interface/f_InterpreteurCommandes.cpp \
+    Interface/Arduino.cpp \
+    Interface/f_GestionMem.cpp \
+    Interface/InterpreteurFichierIni.cpp \
+    Interface/f_SaisieNom.cpp \
+    Interface/f_ConfigI2C.cpp \
+    Interface/f_Compilation.cpp \
+    Supervision/f_SubWindow.cpp \
+    Supervision/f_Supervision.cpp \
+    Supervision/f_WidgetInterne.cpp \
     Supervision/f_AffichageFenetre.cpp \
     Supervision/Widgets/WidgetNI.cpp \
     Supervision/Switch.cpp \
     Supervision/Widgets/WidgetNO.cpp \
     Supervision/Widgets/WidgetAI.cpp \
     Supervision/Widgets/WidgetMOT1.cpp \
-    Vue/Item/Item_ExecPara.cpp \
-    Control/Inst/Inst_EP.cpp \
-    Control/ModInst/f_ModInst_EP.cpp \
     SupervisionWeb/Serveur/RequeteMapper.cpp \
     SupervisionWeb/Serveur/Serveur.cpp \
-    SupervisionWeb/Web/src/Donnees.cpp
+    SupervisionWeb/Web/src/Donnees.cpp \
+    Vue/Vue.cpp \
+    Vue/Scene.cpp \
+    Vue/Item.cpp \
+    Vue/Item/Item_DebFin.cpp \
+    Vue/Item/Item_Ope.cpp \
+    Vue/Item/Item_Cond.cpp \
+    Vue/Item/Item_ES.cpp \
+    Vue/Item/Item_Rout.cpp \
+    Vue/Item/Item_Tempo.cpp \
+    Vue/Item/Item_Com.cpp \
+    Vue/Item/Item_Boucle.cpp \
+    Vue/Item/Item_ExecPara.cpp \
+    Vue/Fleche.cpp \
+    Vue/MarqueurDrop.cpp
 
 
 HEADERS  += f_MainWindow.h \
-    Interface/BtnItem.h \
-    Interface/f_InterpreteurCommandes.h \
-    TypeCommun.h \
-    Control/Routine.h \
-    Control/Instruction.h \
-    Vue/Vue.h \
-    Vue/Scene.h \
-    Vue/Item.h \
-    Control/Inst/Inst_DebFin.h \
-    Vue/Item/Item_DebFin.h \
-    Vue/Item/Item_Ope.h \
-    Vue/Item/Item_Cond.h \
-    Vue/Item/Item_ES.h \
-    Vue/Item/Item_Rout.h \
-    Vue/Item/Item_Tempo.h \
-    Vue/Item/Item_Com.h \
-    ConfigurationMaquette/f_DefinirActionsEtTests.h \
-    ConfigurationMaquette/f_RealiserPlanCablage.h \
-    Supervision/f_SubWindow.h \
-    Supervision/f_Supervision.h \
     ConfigurationAppli/f_Configuration.h \
     ConfigurationAppli/f_CreerProfil.h \
     ConfigurationAppli/f_ChoixProfil.h \
     ConfigurationAppli/f_SupprimerProfil.h \
-    ConfigurationAppli/f_APropos.h \
-    Control/ModuleManager.h \
-    Control/Inst/Inst_Ope.h \
-    Control/ModInst/f_ModInst_Ope.h \
-    Control/Inst/Inst_Cond.h \
-    Control/ModInst/f_ModInst_Cond.h \
-    Control/Inst/Inst_ES.h \
-    Control/ModInst/f_ModInst_ES.h \
-    Control/Inst/Inst_Rout.h \
-    Control/ModInst/f_ModInst_Rout.h \
-    Supervision/f_WidgetInterne.h \
-    Vue/Fleche.h \
-    Interface/Arduino.h \
     ConfigurationAppli/f_ModifierProfil.h \
-    Control/Inst/Inst_Tempo.h \
-    Control/ModInst/f_ModInst_Tempo.h \
-    Control/Inst/Inst_Com.h \
-    Control/ModInst/f_ModInst_Com.h \
-    Vue/MarqueurDrop.h \
-    Control/Inst/Inst_Boucle.h \
-    Control/ModInst/f_ModInst_Boucle.h \
-    Vue/Item/Item_Boucle.h \
-    Interface/f_GestionMem.h \
-    Interface/InterpreteurFichierIni.h \
-    Interface/f_SaisieNom.h \
-    Interface/f_ConfigI2C.h \
-    Interface/f_Compilation.h \
-    Control/Compil_Inst.h \
-    Control/Compil_Rout.h \
+    ConfigurationAppli/f_APropos.h \
+    ConfigurationMaquette/f_DefinirActionsEtTests.h \
+    ConfigurationMaquette/f_RealiserPlanCablage.h \
     ConfigurationMaquette/AssistantConfiguration.h \
     ConfigurationMaquette/f_ChoixControleur.h \
     ConfigurationMaquette/f_ChoixInterface.h \
@@ -164,25 +119,67 @@ HEADERS  += f_MainWindow.h \
     ConfigurationMaquette/RealiserPlanDeCablage/CapteurActionneur.h \
     ConfigurationMaquette/DefinirActionsEtTests/ItemActionTest.h \
     ConfigurationMaquette/DefinirActionsEtTests/f_EditerActionTest.h \
+    Control/Routine.h \
+    Control/Instruction.h \
+    Control/ModuleManager.h \
+    Control/Compil_Inst.h \
+    Control/Compil_Rout.h \
+    Control/Inst/Inst_Ope.h \
+    Control/ModInst/f_ModInst_Ope.h \
+    Control/Inst/Inst_Cond.h \
+    Control/ModInst/f_ModInst_Cond.h \
+    Control/Inst/Inst_ES.h \
+    Control/ModInst/f_ModInst_ES.h \
+    Control/Inst/Inst_Rout.h \
+    Control/ModInst/f_ModInst_Rout.h \
+    Control/Inst/Inst_Tempo.h \
+    Control/ModInst/f_ModInst_Tempo.h \
+    Control/Inst/Inst_Com.h \
+    Control/ModInst/f_ModInst_Com.h \
+    Control/Inst/Inst_Boucle.h \
+    Control/ModInst/f_ModInst_Boucle.h \
+    Control/Inst/Inst_EP.h \
+    Control/ModInst/f_ModInst_EP.h \
+    Control/Inst/Inst_DebFin.h \
+    Interface/BtnItem.h \
+    Interface/f_InterpreteurCommandes.h \
+    Interface/Arduino.h \
+    Interface/f_GestionMem.h \
+    Interface/InterpreteurFichierIni.h \
+    Interface/f_SaisieNom.h \
+    Interface/f_ConfigI2C.h \
+    Interface/f_Compilation.h \
+    Supervision/f_SubWindow.h \
+    Supervision/f_Supervision.h \
+    Supervision/f_WidgetInterne.h \
     Supervision/f_AffichageFenetre.h \
     Supervision/Widgets/WidgetNI.h \
     Supervision/Switch.h \
     Supervision/Widgets/WidgetNO.h \
     Supervision/Widgets/WidgetAI.h \
     Supervision/Widgets/WidgetMOT1.h \
-    Vue/Item/Item_ExecPara.h \
-    Control/Inst/Inst_EP.h \
-    f_ModInst_EP.h \
-    Control/ModInst/f_ModInst_EP.h \
     SupervisionWeb/Serveur/RequeteMapper.h \
     SupervisionWeb/Serveur/Serveur.h \
-    SupervisionWeb/Web/src/Donnees.h
+    SupervisionWeb/Web/src/Donnees.h \
+    Vue/Vue.h \
+    Vue/Scene.h \
+    Vue/Item.h \
+    Vue/Item/Item_DebFin.h \
+    Vue/Item/Item_Ope.h \
+    Vue/Item/Item_Cond.h \
+    Vue/Item/Item_ES.h \
+    Vue/Item/Item_Rout.h \
+    Vue/Item/Item_Tempo.h \
+    Vue/Item/Item_Com.h \
+    Vue/Item/Item_Boucle.h \
+    Vue/Item/Item_ExecPara.h \
+    Vue/Fleche.h \
+    Vue/MarqueurDrop.h
 
 FORMS    += f_MainWindow.ui \
     Interface/f_InterpreteurCommandes.ui \
     ConfigurationMaquette/f_DefinirActionsEtTests.ui \
     ConfigurationMaquette/f_RealiserPlanCablage.ui \
-    Supervision/f_Supervision.ui \
     ConfigurationAppli/f_Configuration.ui \
     ConfigurationAppli/f_CreerProfil.ui \
     ConfigurationAppli/f_ChoixProfil.ui \
@@ -204,8 +201,8 @@ FORMS    += f_MainWindow.ui \
     ConfigurationMaquette/f_ChoixInterface.ui \
     ConfigurationMaquette/f_ChoixModules.ui \
     ConfigurationMaquette/DefinirActionsEtTests/f_EditerActionTest.ui \
-    Supervision/f_AffichageFenetre.ui \
-    Control/ModInst/f_ModInst_EP.ui
+    Control/ModInst/f_ModInst_EP.ui \
+    Supervision/f_Supervision.ui
 
 
 RESOURCES += \

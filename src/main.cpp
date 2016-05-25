@@ -25,14 +25,13 @@
 
 //===   Headers persos  ===
 #include "f_MainWindow.h"
-#include "ConfigurationAppli/f_ChoixProfil.h"
-#include "Interface/Arduino.h"
-#include "SupervisionWeb/Web/src/Donnees.h"
-
 
 int main(int argc, char *argv[])
 {
     QApplication    a  (argc, argv) ;
     f_MainWindow    w  (0) ;
-    return a.exec();
+
+   // return a.exec();
+    a.exec();
+    return 0;
 }

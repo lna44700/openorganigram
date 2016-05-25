@@ -22,8 +22,7 @@
 //=====   En-Têtes Personnels   =====
 #include "f_Supervision.h"
 #include "ui_f_Supervision.h"
-
-#include "f_AffichageFenetre.h"
+//#include "f_AffichageFenetre.h"
 
 //=====   En-Têtes standards    =====
 #include <QDebug>
@@ -79,9 +78,8 @@ f_Supervision::~f_Supervision() // Destructeur
  **/
 void f_Supervision::on_BtAfficher_clicked() // Permet de ré afficher toute les fenêtres
 {
-    f_AffichageFenetre dialog(ListeFenetre, this);
-
-    dialog.exec();
+//    f_AffichageFenetre dialog(ListeFenetre, this);
+//    dialog.exec();
 }
 
 /**         Permet d'envoyer les données à l'Arduino
@@ -324,23 +322,23 @@ void f_Supervision::OuvrirFichierINI(QString sChemin)
             }
             else if(Type == "SRV")
             {
-
+                qDebug() << "SRV";
             }
             else if(Type == "MOT1")
             {
-
+                qDebug() << "MOT1";
             }
             else if(Type == "TC")
             {
-
+                qDebug() << "TC";
             }
             else if(Type == "I2C")
             {
-
+                qDebug() << "I2C";
             }
             else if(Type == "RTC")
             {
-
+                qDebug() << "RTC";
             }
 
             NouvelleFenetre->setWidget(NouveauWidget);

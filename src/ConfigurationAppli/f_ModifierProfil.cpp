@@ -2,11 +2,11 @@
 /** @file       f_ModifierProfil.cpp
 * @brief        Fichier de gestion de modification d'un profil utilisateur.
 *
-* @author       AUBRY Jonathan
+* @author       AUBRY Jonathan, GUITTON Lucas
 * @author       STS IRIS, Lycée Nicolas APPERT, ORVAULT (FRANCE)
 * @since        04/04/2014
-* @version      1.0
-* @date         04/04/2014
+* @version      2.0
+* @date         0/0/2016
 *
 * Fichier source de la classe f_ModifierProfil, permettant de modifier un profil parmis ceux présent dans le fichier de profil.
 *
@@ -19,7 +19,6 @@
 //------------------------------------------------------------------------------
 #include <QSettings>
 #include <QMessageBox>
-#include <QInputDialog>
 #include <QCryptographicHash>
 
 #include "f_ModifierProfil.h"
@@ -35,9 +34,15 @@ f_ModifierProfil::f_ModifierProfil(QWidget *parent) :
     ui(new Ui::f_ModifierProfil)
 {
     ui->setupUi(this) ;
-    ui->Fr_NvMdP->hide() ;
+    ui->LE_NvMdP->hide();
+    ui->Lb_NvMdP->hide();
+    ui->LE_ConfirmMdP->hide();
+    ui->Lb_ConfimMdP->hide();
 
-    this->setWindowTitle("Modifier un profil utilisateur") ;
+    ui->LE_NvMdP->setEchoMode(QLineEdit::Password);
+    ui->LE_ConfirmMdP->setEchoMode(QLineEdit::Password);
+
+    this->setWindowTitle("Modifier le profil") ;
 }
 
 
@@ -51,7 +56,7 @@ f_ModifierProfil::~f_ModifierProfil()
 }
 
 
-/** Annulation de la modification de profil
+/** Annulation de la modification du profil
 * @brief    f_ModifierProfil::on_BtBx_Valider_rejected()
 * @see      f_ModifierProfil
 */
@@ -61,123 +66,50 @@ void f_ModifierProfil::on_BtBx_Valider_rejected()
 }
 
 
-/** Accepte les modifications de profil
+/** Accepte le changement de mot de passe du profil
 * @brief    f_ModifierProfil::on_BtBx_Valider_accepted()
 * @see      f_ModifierProfil
 */
 void f_ModifierProfil::on_BtBx_Valider_accepted()
 {
-    QSettings    Utilisateur ("C:\\Users\\Jonathan\\Documents\\Projet\\openorganigram\\Utilisateur.ini", QSettings::IniFormat) ;
-    QCryptographicHash  HashMdP (QCryptographicHash::Md5) ;
-    QByteArray          ArrayMdP ;
+    QSettings    Profils("Profils.ini", QSettings::IniFormat) ;
 
-    if (ui->RBt_NConfig->isChecked())
+    if(ui->LE_NvMdP->text() == ui->LE_AncienMdP->text())
     {
-        Utilisateur.remove(ProfilAModifier + "/Config") ;
-        Utilisateur.setValue(ProfilAModifier + "/Config", "0") ;
+        QMessageBox::information(this, "Erreur", "Veuillez rentrer un mot de passe différent que l'ancien");
+        ui->LE_NvMdP->clear();
+        ui->LE_ConfirmMdP->clear();
+        ui->LE_NvMdP->setStyleSheet("border: 2px solid red") ;
     }
     else
     {
-        Utilisateur.remove(ProfilAModifier + "/Config") ;
-        Utilisateur.setValue(ProfilAModifier + "/Config", "1") ;
-    }
-
-    if (ui->RBt_NGestionProfil->isChecked())
-    {
-        Utilisateur.remove(ProfilAModifier + "/GestionProfil") ;
-        Utilisateur.setValue(ProfilAModifier + "/GestionProfil", "0") ;
-    }
-    else
-    {
-        Utilisateur.remove(ProfilAModifier + "/GestionProfil") ;
-        Utilisateur.setValue(ProfilAModifier + "/GestionProfil", "1") ;
-    }
-
-    if (ui->RBt_NProfilDefaut->isChecked())
-    {
-        Utilisateur.remove(ProfilAModifier + "/ProfilDefaut") ;
-        Utilisateur.setValue(ProfilAModifier + "/ProfilDefaut", "0") ;
-    }
-    else
-    {
-        Utilisateur.remove(ProfilAModifier + "/ProfilDefaut") ;
-        Utilisateur.setValue(ProfilAModifier + "/ProfilDefaut", "1") ;
-    }
-
-    if (ui->CkBx_NormeOrga->isChecked())
-    {
-        Utilisateur.remove(ProfilAModifier + "/NvlleNormeAffichage") ;
-        Utilisateur.setValue(ProfilAModifier + "/NvlleNormeAffichage", "1") ;
-    }
-    else
-    {
-        Utilisateur.remove(ProfilAModifier + "/NvlleNormeAffichage") ;
-        Utilisateur.setValue(ProfilAModifier + "/NvlleNormeAffichage", "0") ;
-    }
-
-    if (ui->LE_AncienMdP->isModified())
-    {
-        if (ui->RBt_NConfig->isChecked())
+        if(ui->LE_ConfirmMdP->text() != ui->LE_NvMdP->text())
         {
-            Utilisateur.remove(ProfilAModifier + "/Config") ;
-            Utilisateur.setValue(ProfilAModifier + "/Config", "0") ;
+            QMessageBox::information(this, "Erreur", "Les mots de passes sont différents.") ;
+            ui->LE_ConfirmMdP->clear();
+            ui->LE_ConfirmMdP->setStyleSheet("border: 2px solid red") ;
+            ui->LE_NvMdP->clear();
+            ui->LE_NvMdP->setStyleSheet("border: 2px solid red") ;
         }
         else
         {
-            Utilisateur.remove(ProfilAModifier + "/Config") ;
-            Utilisateur.setValue(ProfilAModifier + "/Config", "1") ;
-        }
-
-        if (ui->RBt_NGestionProfil->isChecked())
-        {
-            Utilisateur.remove(ProfilAModifier + "/GestionProfil") ;
-            Utilisateur.setValue(ProfilAModifier + "/GestionProfil", "0") ;
-        }
-        else
-        {
-            Utilisateur.remove(ProfilAModifier + "/GestionProfil") ;
-            Utilisateur.setValue(ProfilAModifier + "/GestionProfil", "1") ;
-        }
-
-        if (ui->RBt_NProfilDefaut->isChecked())
-        {
-            Utilisateur.remove(ProfilAModifier + "/ProfilDefaut") ;
-            Utilisateur.setValue(ProfilAModifier + "/ProfilDefaut", "0") ;
-        }
-        else
-        {
-            Utilisateur.remove(ProfilAModifier + "/ProfilDefaut") ;
-            Utilisateur.setValue(ProfilAModifier + "/ProfilDefaut", "1") ;
-        }
-
-        if (ui->CkBx_NormeOrga->isChecked())
-        {
-            Utilisateur.remove(ProfilAModifier + "/NvlleNormeAffichage") ;
-            Utilisateur.setValue(ProfilAModifier + "/NvlleNormeAffichage", "1") ;
-        }
-        else
-        {
-            Utilisateur.remove(ProfilAModifier + "/NvlleNormeAffichage") ;
-            Utilisateur.setValue(ProfilAModifier + "/NvlleNormeAffichage", "0") ;
-        }
-
-        if (ui->LE_NvMdP->text() == ui->LE_ConfirmMdP->text())
-        {
-            ArrayMdP = ui->LE_AncienMdP->text().toLocal8Bit() ;
-            HashMdP.addData(ArrayMdP) ;
-
-            if (HashMdP.result() == Utilisateur.value(ProfilAModifier+"/MdP"))
+            QCryptographicHash  MotDePasseHash (QCryptographicHash::Md5) ;
+            QByteArray          MotDePasseBArray ;
+            QString sMotDePasse("");
+            MotDePasseBArray = ui->LE_AncienMdP->text().toLocal8Bit() ;
+            MotDePasseHash.addData(MotDePasseBArray) ;
+            sMotDePasse = Profils.value("Mdp/mdpid1", "").toString();
+            if (QString::fromLocal8Bit(MotDePasseHash.result()) == sMotDePasse)
             {
-                ArrayMdP.remove(0, ArrayMdP.size()) ;
-                HashMdP.reset() ;
-                ArrayMdP = ui->LE_NvMdP->text().toLocal8Bit() ;
-                HashMdP.addData(ArrayMdP) ;
+                MotDePasseBArray.remove(0, MotDePasseBArray.size()) ;
+                MotDePasseHash.reset() ;
+                MotDePasseBArray = ui->LE_NvMdP->text().toLocal8Bit() ;
+                MotDePasseHash.addData(MotDePasseBArray) ;
+                Profils.remove("Mdp/mdpid1");
+                Profils.setValue("Mdp/mdpid1", QString::fromLocal8Bit(MotDePasseHash.result()));
 
-                Utilisateur.remove(ProfilAModifier+"/MdP") ;
-                Utilisateur.setValue(ProfilAModifier+"/MdP", HashMdP.result()) ;
-
-                QMessageBox::information(this, "Profil modifié.", "Le profil à été correctement modifié.") ;
-                f_ModifierProfil::close() ;
+                QMessageBox::information(this, "Profil modifié.", "Le mot de passe à été correctement modifié.") ;
+                f_ModifierProfil::close();
             }
             else
             {
@@ -187,127 +119,29 @@ void f_ModifierProfil::on_BtBx_Valider_accepted()
                 QMessageBox::critical(this, "Profil à modifié.", "L'ancien mot de passe est incorrect.") ;
             }
         }
-        else
-        {
-            ui->LE_ConfirmMdP->clear() ;
-            ui->LE_ConfirmMdP->setStyleSheet("border: 2px solid red") ;
-            ui->LE_NvMdP->clear() ;
-            ui->LE_NvMdP->setStyleSheet("border: 2px solid red") ;
-
-            QMessageBox::critical(this, "Profil à modifié.", "Les mots de passes sont différents.") ;
-        }
-    }
-    else
-    {
-        if (ui->RBt_NConfig->isChecked())
-        {
-            Utilisateur.remove(ProfilAModifier + "/Config") ;
-            Utilisateur.setValue(ProfilAModifier + "/Config", "0") ;
-        }
-        else
-        {
-            Utilisateur.remove(ProfilAModifier + "/Config") ;
-            Utilisateur.setValue(ProfilAModifier + "/Config", "1") ;
-        }
-
-        if (ui->RBt_NGestionProfil->isChecked())
-        {
-            Utilisateur.remove(ProfilAModifier + "/GestionProfil") ;
-            Utilisateur.setValue(ProfilAModifier + "/GestionProfil", "0") ;
-        }
-        else
-        {
-            Utilisateur.remove(ProfilAModifier + "/GestionProfil") ;
-            Utilisateur.setValue(ProfilAModifier + "/GestionProfil", "1") ;
-        }
-
-        if (ui->RBt_NProfilDefaut->isChecked())
-        {
-            Utilisateur.remove(ProfilAModifier + "/ProfilDefaut") ;
-            Utilisateur.setValue(ProfilAModifier + "/ProfilDefaut", "0") ;
-        }
-        else
-        {
-            Utilisateur.remove(ProfilAModifier + "/ProfilDefaut") ;
-            Utilisateur.setValue(ProfilAModifier + "/ProfilDefaut", "1") ;
-        }
-
-        if (ui->CkBx_NormeOrga->isChecked())
-        {
-            Utilisateur.remove(ProfilAModifier + "/NvlleNormeAffichage") ;
-            Utilisateur.setValue(ProfilAModifier + "/NvlleNormeAffichage", "1") ;
-        }
-        else
-        {
-            Utilisateur.remove(ProfilAModifier + "/NvlleNormeAffichage") ;
-            Utilisateur.setValue(ProfilAModifier + "/NvlleNormeAffichage", "0") ;
-        }
-
-        QMessageBox::information(this, "Profil modifié.", "Le profil à été correctement modifié.") ;
-        f_ModifierProfil::close() ;
     }
 }
 
 
-/** Accesseur d'écriture de l'attribut ProfilAModifier
-* @brief    f_ModifierProfil::Set_ProfilAModifier(QString ProfilAModifier)
-* @see      f_ModifierProfil
-*/
-void f_ModifierProfil::Set_ProfilAModifier(QString ProfilAModifier)
+void f_ModifierProfil::on_LE_AncienMdP_textChanged(const QString &arg1)
 {
-    this->ProfilAModifier = ProfilAModifier ;
-}
+    QSettings Profils("Profils.ini", QSettings::IniFormat) ;
+    QString sMotDePasse("");
+    QString MdpEntre ("");
+    QByteArray MotDePasseArray;
 
+    MdpEntre = arg1;
+    MotDePasseArray = QCryptographicHash::hash(MdpEntre.toLocal8Bit(), QCryptographicHash::Md5);
 
-/** Paramètre la fenêtre de modification de profil
-* @brief    f_ModifierProfil::ModifierProfil()
-* @see      f_ModifierProfil
-*/
-void f_ModifierProfil::ModifierProfil()
-{
-    QSettings   Utilisateur ("C:\\Users\\Jonathan\\Documents\\Projet\\openorganigram\\Utilisateur.ini", QSettings::IniFormat) ;
-
-    if (Utilisateur.value(ProfilAModifier + "/ProfilDefaut").toString() == "1")
+    MdpEntre = QString::fromLocal8Bit(MotDePasseArray);
+    sMotDePasse = Profils.value("Mdp/mdpid1", "").toString();
+    if(MdpEntre == sMotDePasse)
     {
-        ui->RBt_OProfilDefaut->setChecked(true) ;
-    }
-    else
-    {
-        ui->RBt_OProfilDefaut->setDisabled(true) ;
-        ui->RBt_NProfilDefaut->setChecked(true) ;
-        ui->RBt_OProfilDefaut->setToolTip("Il existe déjà un profil par défaut !") ;
+        ui->LE_NvMdP->show();
+        ui->Lb_NvMdP->show();
+        ui->LE_ConfirmMdP->show();
+        ui->Lb_ConfimMdP->show();
     }
 
-    if (Utilisateur.value(ProfilAModifier + "/Config").toString() == "1")
-    {
-        ui->RBt_OConfig->setChecked(true) ;
-    }
-    else
-    {
-        ui->RBt_NConfig->setChecked(true) ;
-    }
-
-    if (Utilisateur.value(ProfilAModifier + "/GestionProfil").toString() == "1")
-    {
-        ui->RBt_OGestionProfil->setChecked(true) ;
-    }
-    else
-    {
-        ui->RBt_NGestionProfil->setChecked(true) ;
-    }
-
-    if (Utilisateur.value(ProfilAModifier + "/NvlleNormeAffichage").toString() == "1")
-    {
-        ui->CkBx_NormeOrga->setChecked(true) ;
-    }
-    else
-    {
-        ui->CkBx_NormeOrga->setChecked(false) ;
-    }
-}
-
-
-void f_ModifierProfil::on_LE_AncienMdP_textChanged()
-{
-    ui->Fr_NvMdP->show() ;
+    MotDePasseArray.remove(0, MotDePasseArray.size());
 }

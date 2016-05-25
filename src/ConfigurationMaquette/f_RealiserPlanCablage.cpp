@@ -144,20 +144,5 @@ void f_RealiserPlanCablage::on_Btn_Suiv_clicked()
         Scenes[i]->Enregistrer();
     }
 
-    QFile FichierACopier("TempConfigArduino.ini");
-
-    if(FichierACopier.open(QFile::ReadOnly))
-    {
-        QByteArray Contenu  (FichierACopier.readAll());
-        QSettings FichierCopier("TempConfigArduino.ini", QSettings::IniFormat);
-        QString NomPlanDeCablage = FichierCopier.value("IDENTIFICATION/Nom", "").toString();
-        NomPlanDeCablage += "[Plandecablage].ini";
-        QFile PlanDeCablage(NomPlanDeCablage);
-        PlanDeCablage.open(QFile::ReadWrite);
-        PlanDeCablage.write(Contenu);
-        PlanDeCablage.close();
-    }
-    FichierACopier.close();
-
     this->accept();
 }

@@ -3,16 +3,17 @@
 * @brief        Fichier de gestion du choix du profil utilisateur.
 *
 * @author       AUBRY Jonathan
+* @author       GUITTON Lucas
 * @author       STS IRIS, Lycée Nicolas APPERT, ORVAULT (FRANCE)
 * @since        18/03/2014
-* @version      1.0
-* @date         18/03/2014
+* @version      1.1
+* @date         09/04/2016
 *
 * Fichier source de la classe f_ChoixProfil, permettant de choisir un profil parmis ceux présent dans le fichier de profil.
 *
 * Fabrication   OpenOrganigram.pro
 *
-* @todo         Besoin de vérifier si le fichier d'utilisateur existe, puis lire à l'intérieur et y trouver les différents profils existant.
+* @todo         Rendre le mot de passe crypté lorsqu'il est inscrit dans le fichier .ini
 *
 * @bug          <date du bug> - <CORRIGE> - <Intitulé précis du bug>
 */
@@ -54,12 +55,28 @@ f_ChoixProfil::f_ChoixProfil(QWidget *parent) :
 
         if( Profil != "Inconnu" )
         {
-            ui->Cb_Bx_Profil->addItem( Profil.toString() ) ;
+            ui->CBx_Profil->addItem( Profil.toString() ) ;
         }
         i++ ;
         this->NombreUtilisateurs = i-1 ;
     }while( Profil != "Inconnu" ) ;
 
+    //sécurité dans la gestion de profil. Ceci rends la gestion dynamique et donc possible en toutes circonstances.
+    if(!QFile::exists("Profils.ini"))
+    {
+        QSettings   Profils("Profils.ini", QSettings::IniFormat);
+        QByteArray  MotDePasseBArray;
+        QString     sMotDePasse("test");
+
+        MotDePasseBArray = QCryptographicHash::hash(sMotDePasse.toLocal8Bit(), QCryptographicHash::Md5);
+
+        Profils.setValue("Profils/Profilid0","Eleve");
+        Profils.setValue("Profils/Profilid1", "Professeur");
+        Profils.setValue("Mdp/mdpid0", "");
+        Profils.setValue("Mdp/mdpid1", QString::fromLocal8Bit(MotDePasseBArray));
+
+        MotDePasseBArray.remove(0, MotDePasseBArray.size()) ;
+    }
 
 }
 
@@ -80,72 +97,53 @@ f_ChoixProfil::~f_ChoixProfil()
 */
 void f_ChoixProfil::on_actionValider_accepted()
 {
-/*    QSettings   Utilisateur ("C:\\Users\\Gaetan\\Documents\\PROJET\\openorganigram\\Profils.ini", QSettings::IniFormat) ;
-    QCryptographicHash  HashMDP (QCryptographicHash::Md5) ;
-    QByteArray          ArrayHashMDP ;
-
-    ArrayHashMDP = ui->LE_MdP->text().toLocal8Bit() ;
-    HashMDP.addData(ArrayHashMDP) ;
-
-    if (HashMDP.result() != Utilisateur.value(ui->Cb_Bx_Profil->currentText()+"/MdP"))
-    {
-        QMessageBox::critical(this, "Erreur !", "Mot de passe incorrect.") ;
-        ui->LE_MdP->clear() ;
-        ui->Lb_MdP->setStyleSheet("border: 2px solid red") ;
-    }
-    else
-    {
-        this->ProfilActif = ui->Cb_Bx_Profil->currentText() ;
-
-        QMessageBox::information(this, "Changement de profil.", "Vous êtes maintenant connecté en tant que : " + this->ProfilActif) ;
-        emit accept() ;
-        f_ChoixProfil::close() ;
-    }
-
-*/
     QSettings   Profils ("Profils.ini", QSettings::IniFormat) ;
-    QSettings   Mdps ("Profils.ini", QSettings::IniFormat) ;
     QString  NumProfil ;
     QVariant ProfilSelectionne ;
     QVariant Profil ;
     QString NumMdp ;
-    QVariant MdpEntre ;
-    QVariant Mdp ;
+    QString MdpEntre ;
+    QString Mdp ;
+    QByteArray  MotDePasseBArray;
 
-    ProfilSelectionne = ui->Cb_Bx_Profil->currentText() ;
-    MdpEntre = ui->LE_MdP->text() ;
+
+    ProfilSelectionne = ui->CBx_Profil->currentText() ;
 
     if( ProfilSelectionne == "Eleve")
     {
-        ProfilActif = ui->Cb_Bx_Profil->currentText() ;
-    }
+        ProfilActif = ui->CBx_Profil->currentText() ;
+        emit accept() ;
+        f_ChoixProfil::close() ;
 
-    int i = 0 ;
-    do
+    }
+    else
     {
 
-        NumProfil = "Profils/Profilid" + QString::number( i ) ;
+        MdpEntre = ui->LE_MdP->text() ;
+
+        NumProfil = "Profils/Profilid1";
         Profil = Profils.value( NumProfil, "Inconnu" ) ;
-        NumMdp = "Mdp/mdpid" + QString::number( i ) ;
-        Mdp = Mdps.value ( NumMdp, "") ;
+        NumMdp = "Mdp/mdpid1";
+        Mdp = Profils.value ( NumMdp, "").toString() ;
+
+        MotDePasseBArray = QCryptographicHash::hash(MdpEntre.toLocal8Bit(), QCryptographicHash::Md5);
+        MdpEntre = QString::fromLocal8Bit(MotDePasseBArray);
 
         if( Mdp == MdpEntre )
         {
-            this->ProfilActif = ui->Cb_Bx_Profil->currentText() ;
+            this->ProfilActif = ui->CBx_Profil->currentText() ;
 
             QMessageBox::information(this, "Changement de profil.", "Vous êtes maintenant connecté en tant que : " + this->ProfilActif) ;
             emit accept() ;
             f_ChoixProfil::close() ;
         }
-        i++ ;
-    }while( Mdp != MdpEntre && i < NombreUtilisateurs ) ;
-    if( Mdp != MdpEntre )
-    {
-        QMessageBox::critical(this, "Erreur !", "Mot de passe incorrect.") ;
-        ui->LE_MdP->clear() ;
-        ui->Lb_MdP->setStyleSheet("border: 2px solid red") ;
+        else
+        {
+            QMessageBox::critical(this, "Erreur !", "Mot de passe incorrect.") ;
+            ui->LE_MdP->clear() ;
+            ui->Lb_MdP->setStyleSheet("border: 2px solid red") ;
+        }
     }
-
 }
 
 
@@ -169,7 +167,12 @@ QString f_ChoixProfil::Get_ProfilActif()
 }
 
 
-void f_ChoixProfil::on_Cb_Bx_Profil_currentTextChanged(const QString &arg1)
+/**
+ * Slot de récupération du profil sélectionné
+ * @brief f_MainWindow::on_CBx_Profil_currentTextChanged
+ * @param &arg1
+ */
+void f_ChoixProfil::on_CBx_Profil_currentTextChanged(const QString &arg1)
 {
     if (arg1 == "Professeur")
     {
@@ -185,6 +188,11 @@ void f_ChoixProfil::on_Cb_Bx_Profil_currentTextChanged(const QString &arg1)
 }
 
 
+/**
+ * Event de fermeture
+ * @brief f_MainWindow::closeEvent
+ * @param *CloseEvent
+ */
 void f_ChoixProfil::closeEvent(QCloseEvent *CloseEvent)
 {
     emit(EnvoieProfil(ProfilActif));

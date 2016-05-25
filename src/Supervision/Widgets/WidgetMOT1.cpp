@@ -2,7 +2,7 @@
 #include <QDebug>
 
 #include "WidgetMOT1.h"
-#include "../f_SubWindow.h"
+//#include "../f_SubWindow.h"
 
 WidgetMOT1::WidgetMOT1(QString IOCard, QString Broche, QWidget *parent) :
     f_WidgetInterne (IOCard, Broche, parent),

@@ -10,7 +10,7 @@
  * @version     1.0
  * @date        03/03/14
  *
- * Fenêtre principale de l'application, gère la plupars des actions et coordonnes celles ci à travers
+ * Fenêtre principale de l'application, gère la plupart des actions et coordonnes celles ci à travers
  * les différents modules
  *
  * Fabrication  OpenOrganigram.pro
@@ -35,12 +35,14 @@
 #include <QProgressBar>
 #include <QTemporaryFile>
 #include <QTimer>
+#include <QStandardPaths>
+
 
 //=====   Headers Peros   =====
 #include "f_MainWindow.h"
 #include "ui_f_MainWindow.h"
 #include "ConfigurationMaquette/AssistantConfiguration.h"
-#include "Supervision/f_Supervision.h"
+//#include "Supervision/f_Supervision.h"
 #include "ConfigurationAppli/f_Configuration.h"
 #include "ConfigurationAppli/f_CreerProfil.h"
 #include "ConfigurationAppli/f_SupprimerProfil.h"
@@ -79,21 +81,47 @@ f_MainWindow::f_MainWindow(QWidget *    pParent) :
     pStIt_ListeModules      (0) ,
     pArduino                (new Arduino),
     pEtatConnexion          (new QLabel),
-    ui                      (new Ui::f_MainWindow)
+    serveurWeb              (),
+    ui                      (new Ui::f_MainWindow),
+    RepertoireProjets       (QDir::currentPath())
 {
 
     // Initialisation générale
     this->ui->setupUi(this) ;
     this->ui->actionInterpreteur->setShortcut(tr("ALT+F8"));
-    f_Supervision * Sup (new f_Supervision(pArduino));
+//    f_Supervision * Sup (new f_Supervision(pArduino));
     DonneesWeb = new Donnees(pArduino);
-    this->ui->DockSV->setWidget(Sup);
-    connect(this->ui->DockSV, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), Sup, SLOT(EmplacementSupervision(Qt::DockWidgetArea)));
+//    this->ui->DockSV->setWidget(Sup);
+//    connect(this->ui->DockSV, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), Sup, SLOT(EmplacementSupervision(Qt::DockWidgetArea)));
+
     this->ui->DockSV->hide() ;
+    this->ui->actionSV->setEnabled(false);
     this->InitialiserBt_ItemDock() ;
+
+    //initialisation repertoire courant
+    QString CheminRepertoireCourant(QApplication::applicationDirPath());
+    QDir RepertoireCourant(QDir::currentPath());
+    RepertoireCourant.setCurrent(CheminRepertoireCourant);
 
     // Ini. avec utilisateur de base
     on_envoieProfil("Eleve");
+
+    // Création du fichier .ini si le fichier n'existe pas.
+    if(!QFile::exists("Profils.ini"))
+    {
+        QSettings   Profils("Profils.ini", QSettings::IniFormat);
+        QByteArray  MotDePasseBArray;
+        QString     sMotDePasse("test");
+
+        MotDePasseBArray = QCryptographicHash::hash(sMotDePasse.toLocal8Bit(), QCryptographicHash::Md5);
+
+        Profils.setValue("Profils/Profilid0","Eleve");
+        Profils.setValue("Profils/Profilid1", "Professeur");
+        Profils.setValue("Mdp/mdpid0", "");
+        Profils.setValue("Mdp/mdpid1", QString::fromLocal8Bit(MotDePasseBArray));
+
+        MotDePasseBArray.remove(0, MotDePasseBArray.size()) ;
+    }
 
     //Partie Kévin Interpréteur-----------------------------
     this->ui->actionInterpreteur->setIcon(QIcon(":/Images/App/prog.png"));  //Affiche un icone dans le menu d'action
@@ -109,6 +137,16 @@ f_MainWindow::f_MainWindow(QWidget *    pParent) :
     this->EtatProjetenCours.Etat.ProjetEnregistre = 0;
     this->EtatProjetenCours.Etat.ModuleCharge = 0;
     this->EtatProjetenCours.sCheminVersProjet = "";
+
+    //Création du répertoire des projets
+    QString CheminRepertoireProjets ("");
+    CheminRepertoireProjets = this->RepertoireProjets.absolutePath()+"/Projets";
+    if(!QDir(CheminRepertoireProjets).exists())
+    {
+        this->RepertoireProjets.setCurrent(CheminRepertoireProjets);
+        this->RepertoireProjets.mkdir(CheminRepertoireProjets);
+    }
+    this->CheminRepertoirePojets = CheminRepertoireProjets;
 
     //Désactivation des actions
     this->ActiverActions(false);
@@ -219,6 +257,9 @@ void f_MainWindow::InitialiserBt_ItemDock()
     this->pBt_ItemDock[6] = new BtnItem  (TEMPO, this) ;
     this->pBt_ItemDock[7] = new BtnItem  (COM, this)   ;
 
+    //temporaire tant que l'execution parallèle ne peut être codée.
+    this->pBt_ItemDock[5]->setEnabled(false);
+
     //Préparation du dock
     this->ui->DockBtn->setWidget(new QWidget) ;
     this->ui->DockBtn->widget()->setLayout(new QVBoxLayout) ;
@@ -268,6 +309,7 @@ void f_MainWindow::ActiverActions(bool bActive)
         this->ui->actionDebug->setEnabled(bActive) ;
         this->ui->actionDemarrerServeurWeb->setEnabled(bActive) ;
         this->ui->actionSV->setEnabled(bActive) ;
+        this->ui->actionVueGlobale->setEnabled(bActive);
     }
 }
 
@@ -284,7 +326,7 @@ bool f_MainWindow::Sauver()
     //Si le nom du fichier est vide, on demande à l'utilisateur d'en fournir un
     if(this->EtatProjetenCours.sCheminVersProjet.isEmpty())
     {
-        this->ObtenirEmplacementProjet() ;
+        this->ObtenirEmplacementProjet(false) ;
     }
 
     //S'il est toujours vide c'est que l'utilisateur a annuler cette opération
@@ -359,7 +401,7 @@ bool f_MainWindow::Sauver()
 void f_MainWindow::Fermer()
 {
     //On retire les fenetre de la supervision
-    qobject_cast<f_Supervision*>(this->ui->DockSV->widget())->PurgerListeFenetre();
+    //qobject_cast<f_Supervision*>(this->ui->DockSV->widget())->PurgerListeFenetre();
 
     //Si on est en pleine exécution, on l'arrete
     if(this->ui->actionArreter->isEnabled())
@@ -432,7 +474,6 @@ void f_MainWindow::Ouvrir()
                 {
                     QMessageBox::warning(this, "Erreur d'ouverture", "Le fichier donné n'a pas put être ouvert pour la raison suivant : " + FichierOrganigramme.errorString(), QMessageBox::Ok);
                 }
-
                 FichierOrganigramme.close();
             }
             else    //Enfin si l'extension ne convient pas..
@@ -440,7 +481,6 @@ void f_MainWindow::Ouvrir()
                 QMessageBox::warning(this, "Erreur d'extension", "Le fichier choisis ne semble pas avoir la bonne extension...", QMessageBox::Ok);
             }
         }
-
 
         //On supprime la barre de chargement ensuite
         this->statusBar()->removeWidget(pBarreChargement);
@@ -508,8 +548,9 @@ void f_MainWindow::ParserLeFichier(QFile& FichierOrganigramme, QProgressBar* pBa
                 {
                     this->InitialiserGestionProjet();
 
-                    QStringRef  NomProjet   (Parseur.attributes().value("sNom"));
-                    this->pStIt_Projet->setText(NomProjet.toString());
+                    QFileInfo NomProjet(FichierOrganigramme);
+                    QString  sNomProjet(NomProjet.fileName());
+                    this->pStIt_Projet->setText(sNomProjet.replace(".oorg", ""));
 
                     bAttribut = false;
                 }
@@ -773,6 +814,12 @@ void f_MainWindow::CreerNouveauProjet(QString CheminIni)
 
         //Récupération des différent modules
         QSettings FichierIni(CheminIni, QSettings::IniFormat);
+
+        //Définir le nom de projet dans le treeView
+        FichierIni.beginGroup("IDENTIFICATION");
+        this->pStIt_Projet->setText(FichierIni.value("Nom","Projet sans nom").toString());
+        FichierIni.endGroup();
+
         FichierIni.beginGroup("MODULE");
         QStringList ListeNomModules (FichierIni.childKeys());
         qDebug() << ListeNomModules;
@@ -906,10 +953,21 @@ void f_MainWindow::CreerNouveauProjet(QString CheminIni)
             this->pStIt_ListeModules->appendRow(pStIt_NouveauModule) ;
         }
 
-        qobject_cast<f_Supervision*>(this->ui->DockSV->widget())->OuvrirFichierINI(CheminIni);
+        //qobject_cast<f_Supervision*>(this->ui->DockSV->widget())->OuvrirFichierINI(CheminIni);
 
     }
 
+    //Création du fichier de plan de cablage dans le bon dossier de projet
+
+    QString NomProjet = this->RecupererNomProjet("TempConfigArduino.ini");
+    QString CheminRepertoireProjetCourant("");
+    QDir RepertoireProjetCourant(QDir::currentPath());
+
+    this->CreerPlanCablage(this->CreerArborescence(NomProjet), NomProjet);
+
+    CheminRepertoireProjetCourant = QApplication::applicationDirPath();
+
+    RepertoireProjetCourant.setPath(CheminRepertoireProjetCourant);
 
 
 
@@ -924,6 +982,7 @@ void f_MainWindow::CreerNouveauProjet(QString CheminIni)
     this->ActiverBt_ItemDock(true) ;
     this->ActiverActions(true);
 }
+
 
 /**
  * Vérifie si le projet et bien sauvegardé, propose une sauvegarde dans
@@ -992,22 +1051,35 @@ void f_MainWindow::ObtenirEmplacementProjet(bool bOuvrir)
 
     if(bOuvrir)
     {
-        sChemin = QFileDialog::getOpenFileName(this, "Ouvrir...", QDir::homePath(), "Fichier OpenOrganigram (*.oorg)") ;
+        sChemin = QFileDialog::getOpenFileName(this, "Ouvrir...", this->CheminRepertoirePojets, "Fichier OpenOrganigram (*.oorg)") ;
+        QString CheminRepertoireProjetCourant("");
+        QDir RepertoireProjetCourant(QDir::currentPath());
+        QString sCheminCopie("");
+
+        sCheminCopie = this->CreerArborescence(sChemin);
+        sCheminCopie += "/"+sChemin;
+        qDebug() << "nom copie oorg" << sCheminCopie;
+        QFile::copy(sChemin, sCheminCopie);
+        CheminRepertoireProjetCourant = QApplication::applicationDirPath();
+        RepertoireProjetCourant.setCurrent(CheminRepertoireProjetCourant);
+        RepertoireProjetCourant.setPath(CheminRepertoireProjetCourant);
     }
     else
     {
-        sChemin = QFileDialog::getSaveFileName(this, "Enregistrer sous...", QDir::homePath(), "Fichier OpenOrganigram (*.oorg)") ;
+        QFileDialog fdSauvegarde;
+        fdSauvegarde.setDefaultSuffix(pStIt_Projet->text()+".oorg") ;
+        sChemin = fdSauvegarde.getSaveFileName(this, "Enregistrer sous...", this->CheminRepertoirePojets, "Fichier OpenOrganigram (*.oorg)") ;
     }
 
     this->EtatProjetenCours.sCheminVersProjet = sChemin ;
 }
+
 
 /** Création de la fenêtre de configuration et ouverture
  *
  * @brief   f_MainWindow::OuvrirFenetreConfig()
  * @see     f_Configuration
 */
-
 void f_MainWindow::OuvrirFenetreConfig()
 {
     f_Configuration   f_Config  (&(this->serveurWeb), this) ;
@@ -1016,16 +1088,15 @@ void f_MainWindow::OuvrirFenetreConfig()
     f_Config.exec() ;
 }
 
+
 /** Création de la fenêtre de configuration et ouverture
  *
  * @brief   f_MainWindow::OuvrirFenetreProfil()
  * @see     f_Configuration
 */
-
 void f_MainWindow::OuvrirFenetreNouveauProfil()
 {
     f_CreerProfil   f_Profil  (this) ;
-
     f_Profil.exec() ;
 }
 
@@ -1035,7 +1106,6 @@ void f_MainWindow::OuvrirFenetreNouveauProfil()
 * @brief    f_MainWindow::OuvrirFenetreChoixProfil()
 * @see      f_ChoixProfil
 */
-
 void f_MainWindow::OuvrirFenetreChoisirProfil()
 {
     f_ChoixProfil    f_ChoisirProfil  (this) ;
@@ -1051,11 +1121,9 @@ void f_MainWindow::OuvrirFenetreChoisirProfil()
 * @brief    f_MainWindow::OuvrirFenetreSupprimerProfil()
 * @see      f_SupprimerProfil
 */
-
 void f_MainWindow::OuvrirFenetreSupprimerProfil()
 {
     f_SupprimerProfil    f_SupprimerLeProfil  (this) ;
-
     f_SupprimerLeProfil.exec() ;
 }
 
@@ -1065,26 +1133,10 @@ void f_MainWindow::OuvrirFenetreSupprimerProfil()
 * @brief    f_MainWindow::OuvrirFenetreModifierProfil()
 * @see      f_ModifierProfil
 */
-
 void f_MainWindow::OuvrirFenetreModifierProfil()
 { 
-    bool    bOk (false) ;
-    QStringList ListeProfil ;
-    QSettings   Utilisateur ("C:\\Users\\Jonathan\\Documents\\Projet\\openorganigram\\Utilisateur.ini", QSettings::IniFormat) ;
-    QString     ProfilAModifier ;
-
-    ListeProfil = Utilisateur.childGroups() ;
-    ProfilAModifier = QInputDialog::getItem(this, "Profil à modifier.", "Choisissez le profil à modifier.", ListeProfil, 0, true, &bOk) ;
-
-    if (bOk == true)
-    {
         f_ModifierProfil   f_ModifierLeProfil  (this) ;
-        f_ModifierLeProfil.Set_ProfilAModifier(ProfilAModifier) ;
-        f_ModifierLeProfil.ModifierProfil() ;
         f_ModifierLeProfil.exec() ;
-    }
-
-
 }
 
 /** Création de la fenêtre à propos
@@ -1095,11 +1147,8 @@ void f_MainWindow::OuvrirFenetreModifierProfil()
 
 void f_MainWindow::OuvrirFenetreAPropos()
 {
-    f_APropos    f_APropos  (this) ;
-    //QWidget::connect(&f_ChoisirProfil, SIGNAL(EnvoieProfil(QString)),
-      //               this, SLOT(on_envoieProfil(QString)));
-
-    f_APropos.exec() ;
+    f_APropos    f_AProp  (this) ;
+    f_AProp.exec() ;
 }
 
 
@@ -1158,7 +1207,6 @@ void f_MainWindow::on_actionEnregistrer_triggered()
  */
 void f_MainWindow::on_actionEnregistrer_sous_triggered()
 {
-    this->ObtenirEmplacementProjet() ;
     this->Sauver() ;
 }
 
@@ -1253,11 +1301,7 @@ void f_MainWindow::on_treeView_doubleClicked(const QModelIndex &index)
     if(Texte == "Plan de câblage")
     {
         QMessageBox::information(this, "Plan de câblage", "ouverture du plan") ;
-        QString NomProjetCourant("");
-        QSettings Temp("TempConfigArduino.ini");
-        NomProjetCourant = Temp.value("IDENTIFICATION/Nom", "").toString();
-        NomProjetCourant += "[PlanDeCablage].ini";
-
+        QString NomProjetCourant("TempConfigArduino.ini");
         QFile ConfigCourante(NomProjetCourant);
 
         if(ConfigCourante.open(QFile::ReadWrite))
@@ -1330,6 +1374,7 @@ void f_MainWindow::on_actionAgrandir_triggered()
     QGraphicsView*  Vue     (qobject_cast<QGraphicsView *>(Central->currentWidget())) ;
 
     Vue->scale(1.1, 1.1);
+    ui->actionVueGlobale->setEnabled(true);
 }
 
 /**
@@ -1344,10 +1389,30 @@ void f_MainWindow::on_actionRetrecir_triggered()
     QGraphicsView*  Vue     (qobject_cast<QGraphicsView *>(Central->currentWidget())) ;
 
     Vue->scale(100.0/110.0, 100.0/110.0);
+    ui->actionVueGlobale->setEnabled(true);
 }
 
 /**
- * Appel de l'interpreteur de commande pour shelle Mega Arduino
+ * Dezoom l'organigramme pour vue globale
+ *
+ * @brief f_MainWindow::on_actionVueGlobale_triggered
+ */
+void f_MainWindow::on_actionVueGlobale_triggered()
+{
+    QTabWidget *    Central (qobject_cast<QTabWidget *>(this->centralWidget())) ;
+
+    QGraphicsView*  Vue     (qobject_cast<QGraphicsView *>(Central->currentWidget())) ;
+    QList<QGraphicsItem *> ListeItems(Vue->items());
+
+    int NombreItems = ListeItems.size();
+
+    Vue->scale((10.0/NombreItems)/(1.0+(1.0/NombreItems)), (10.0/NombreItems)/(1.0+(1.0/NombreItems)));
+    ui->actionVueGlobale->setEnabled(false);
+}
+
+
+/**
+ * Appel de l'interpreteur de commande pour shell Mega Arduino
  *
  * @brief f_MainWindow::on_actionInterpreteur_triggered
  */
@@ -1576,7 +1641,7 @@ void f_MainWindow::slot_FinInterpretationIniOuvrirProjet(InterpreteurFichierIni*
     if(Reussi)
     {
         //On envois le fichier ini à la supervision
-        qobject_cast<f_Supervision*>(this->ui->DockSV->widget())->OuvrirFichierINI(Chemin);
+        //qobject_cast<f_Supervision*>(this->ui->DockSV->widget())->OuvrirFichierINI(Chemin);
     }
     else //Sinon erreur
     {
@@ -1585,26 +1650,29 @@ void f_MainWindow::slot_FinInterpretationIniOuvrirProjet(InterpreteurFichierIni*
 }
 
 /**
- * Demande de demarrage du serveur web
- * @brief f_MainWindow::on_actionServeur_Web_toggled
- * @param arg1
+ * Slot de redémarrage de la maquette
+ * @brief f_MainWindow::on_actionRedemarrer_la_maquette_triggered
  */
-void f_MainWindow::on_actionServeur_Web_toggled(bool arg1)
-{
-
-}
-
 void f_MainWindow::on_actionRedemarrer_la_maquette_triggered()
 {
     this->pArduino->EnvoyerDonnees(QString("Z"), GEN);
 }
 
+/**
+ * Slot de gestion des composants I2C
+ * @brief f_MainWindow::on_actionGestion_des_composants_I2C_triggered
+ */
 void f_MainWindow::on_actionGestion_des_composants_I2C_triggered()
 {
     f_ConfigI2C ConfigI2C(this->pArduino, this);
     ConfigI2C.exec();
 }
 
+/**
+ * Slot d'envoi de profil pour la paramètrage de l'application
+ * @brief f_MainWindow::on_envoieProfil
+ * @param ProfilActif
+ */
 void f_MainWindow::on_envoieProfil(QString ProfilActif)
 {
     this->ProfilActif = ProfilActif ;
@@ -1634,12 +1702,17 @@ void f_MainWindow::on_envoieProfil(QString ProfilActif)
 }
 
 
+/**
+ * Slot de demarrage du Serveur Web
+ * @brief f_MainWindow::on_actionDemarrerServeurWeb_triggered
+ */
 void f_MainWindow::on_actionDemarrerServeurWeb_triggered()
 {
     qDebug() << "Bouton masqué";
     this->ui->actionArreterServeurWeb->setEnabled(true) ; // Le bouton arreter se dégrise
     qDebug() << "Bouton visible";
     this->ui->actionDemarrerServeurWeb->setEnabled(false) ; // Le bouton démarrer se grise
+
     qDebug() << "Lancement du serveur ...";
     serveurWeb.lancerServeur(); // Lance le serveur Web
     qDebug() << "Serveur lancé";
@@ -1652,11 +1725,13 @@ void f_MainWindow::on_actionDemarrerServeurWeb_triggered()
     //qDebug() << "Timer Ok";
     bEtatTimer == true;
     DonneesWeb->on_EcrireDonneesDansPageHTML();
-
 }
 
 
-
+/**
+ * Slot d'arret du Serveur Web
+ * @brief f_MainWindow::on_actionArreterServeurWeb_triggered
+ */
 void f_MainWindow::on_actionArreterServeurWeb_triggered()
 {
     this->DonneesWeb->Get_pTimer()->stop();
@@ -1684,14 +1759,126 @@ void f_MainWindow::on_EnvoieEtatServeur(bool EtatServeur)
     }
 }
 
-/** Création de la fenêtre de configuration et ouverture
- *
- * @brief   f_MainWindow::OuvrirFenetreProfil()
- * @see     f_Configuration
-*/
+/**
+ * Slot d'ouverture de la fenêtre A propos
+ * @brief f_MainWindow::on_actionA_propos_triggered
+ */
 void f_MainWindow::on_actionA_propos_triggered()
 {
-    this->OuvrirFenetreAPropos(); ; // Ouvre la fenêtre "A propos" qui donne des infos sur l'application.
+   this->OuvrirFenetreAPropos(); ; // Ouvre la fenêtre "A propos" qui donne des infos sur l'application.
+}
+
+/**
+ * Méthode de récupération du nom de projet en cours
+ * @brief f_MainWindow::RecupererNomProjet
+ * @return retourne un QString: le nom du projet en courant
+ */
+QString f_MainWindow::RecupererNomProjet(QString sChemin)
+{
+    QSettings FichierINI(sChemin, QSettings::IniFormat);
+    QString NomProjet = FichierINI.value("IDENTIFICATION/Nom", "Sans Nom").toString();
+
+    return NomProjet;
+}
+
+/**
+ * Méthode de création de l'arborescence du dossier des projets
+ * @brief f_MainWindow::CreerArborescence
+ * @param NomProjet
+ * @return retourne un QString: le chemin du repertoire de  projet courant
+ */
+QString f_MainWindow::CreerArborescence(QString NomProjet)
+{
+    QDir RepertoireProjetCourant(QDir::currentPath());
+    QString CheminRepertoireProjetCourant ("");
+
+    CheminRepertoireProjetCourant = RepertoireProjetCourant.absolutePath()+"/Projets";
+    if(!QDir(CheminRepertoireProjetCourant).exists())
+    {
+        if(!RepertoireProjetCourant.mkdir(CheminRepertoireProjetCourant))
+        {
+            QMessageBox test (this);
+            test.setText("dossier ("+CheminRepertoireProjetCourant+") non créé!");
+            test.exec();
+        }
+        qDebug() << "if" << CheminRepertoireProjetCourant;
+        RepertoireProjetCourant.setPath(CheminRepertoireProjetCourant);
+
+        CheminRepertoireProjetCourant = RepertoireProjetCourant.absolutePath()+"/"+NomProjet;
+        if(!QDir(CheminRepertoireProjetCourant).exists())
+        {
+            if(!RepertoireProjetCourant.mkdir(CheminRepertoireProjetCourant))
+            {
+                QMessageBox test (this);
+                test.setText("dossier Projets ("+NomProjet+") non créé!");
+                test.exec();
+            }
+            qDebug() << "if if" <<CheminRepertoireProjetCourant;
+            RepertoireProjetCourant.setPath(CheminRepertoireProjetCourant);
+        }
+        return RepertoireProjetCourant.absolutePath();
+    }
+    else
+    {
+        CheminRepertoireProjetCourant = RepertoireProjetCourant.absolutePath()+"/Projets/"+NomProjet;
+        if(!QDir(CheminRepertoireProjetCourant).exists())
+        {
+            if(!RepertoireProjetCourant.mkdir(CheminRepertoireProjetCourant))
+            {
+                QMessageBox test (this);
+                test.setText("dossier Projets ("+NomProjet+") non créé!");
+                test.exec();
+            }
+            qDebug() << "else" << CheminRepertoireProjetCourant;
+            RepertoireProjetCourant.setPath(CheminRepertoireProjetCourant);
+        }
+        else
+        {
+            CheminRepertoireProjetCourant = RepertoireProjetCourant.absolutePath()+"/Projets/"+NomProjet;
+            qDebug() << "else else" << CheminRepertoireProjetCourant;
+            RepertoireProjetCourant.setPath(CheminRepertoireProjetCourant);
+        }
+    }
+    return RepertoireProjetCourant.absolutePath();
+}
+
+/**
+ * Méthode de création de l'arborescence du dossier des projets
+ * @brief f_MainWindow::CreerArborescence
+ * @param NomProjet
+ * @return retourne un booléen
+ */
+bool f_MainWindow::CreerPlanCablage(QString Chemin, QString NomProjet)
+{
+    QString CheminRepertoireProjetCourant("");
+    QDir RepertoireProjetCourant(QDir::currentPath());
+
+    CheminRepertoireProjetCourant = QApplication::applicationDirPath();
+    RepertoireProjetCourant.setPath(CheminRepertoireProjetCourant);
+
+    QString NomPlanDeCablage("");
+    NomPlanDeCablage = NomProjet + "[Plandecablage].ini";
+    QFile FichierCopier("TempConfigArduino.ini");
+
+    FichierCopier.open(QFile::ReadOnly);
+    QByteArray Contenu = FichierCopier.readAll();
+
+    Chemin += "/"+NomProjet+".ini";
+    RepertoireProjetCourant.setPath(Chemin);
+
+    QFile PlanDeCablage(RepertoireProjetCourant.absolutePath());
+    PlanDeCablage.open(QFile::ReadWrite);
+    PlanDeCablage.write(Contenu);
+    PlanDeCablage.close();
+
+    if(PlanDeCablage.exists())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 

@@ -56,6 +56,8 @@
         <file>Images/Items/iconparal.png</file>
         <file>Images/App/import.png</file>
         <file>Images/App/icons.png</file>
+        <file>Images/App/VueGlobale-48.png</file>
         <file>Images/App/Port.png</file>
+        <file>Images/App/SauvergarderDansMemoire.png</file>
     </qresource>
 </RCC>

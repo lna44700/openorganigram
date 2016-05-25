@@ -6,7 +6,7 @@
 * @author       STS SNIR, Lycée Nicolas APPERT, ORVAULT (FRANCE)
 * @since        11/04/2016
 * @version      1.0
-* @date         11/04/2016
+* @date         11/05/2016
 *
 * Fichier source de la classe f_APropos, permettant l'affichage de la fenêtre à propos.
 *
@@ -17,11 +17,7 @@
 * @bug          <date du bug> - <CORRIGE> - <Intitulé précis du bug>
 */
 //------------------------------------------------------------------------------
-#include <QSettings>
-#include <QMessageBox>
-#include <QCryptographicHash>
 
-#include "f_MainWindow.h"
 #include "f_APropos.h"
 #include "ui_f_APropos.h"
 
@@ -69,10 +65,4 @@ void f_APropos::on_actionValider_accepted()
 void f_APropos::on_actionValider_rejected()
 {
     f_APropos::close() ;
-}
-
-
-void f_APropos::closeEvent(QCloseEvent *CloseEvent)
-{
-    CloseEvent->accept();
 }

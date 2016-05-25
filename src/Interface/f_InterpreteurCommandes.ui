@@ -17,6 +17,9 @@
    <iconset resource="../ressources.qrc">
     <normaloff>:/Images/App/shell.png</normaloff>:/Images/App/shell.png</iconset>
   </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">

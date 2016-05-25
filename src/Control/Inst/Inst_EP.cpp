@@ -110,7 +110,7 @@ bool Inst_EP::Modifier()
  */
 void Inst_EP::setDesc(DescEP DescriptionExecPara)
 {
-    //Affectation à nos propre attributs
+    //Affectation à nos propres attributs
     this->DescriptionExecPara.nNombreDeBranches  = DescriptionExecPara.nNombreDeBranches ;
 }
 

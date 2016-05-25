@@ -39,7 +39,7 @@ f_InterpreteurCommandes::f_InterpreteurCommandes(QWidget *parent) :
     indexRetour         (0)
 {
     ui->setupUi(this);
-    this->setWindowFlags(Qt::WindowCloseButtonHint);        //Affiche uniquement le bouton de fermeture
+    //this->setWindowFlags(Qt::WindowCloseButtonHint);        // Ne marche plus. Fait buguer la fenêtre. Fonction désirée: Affiche uniquement le bouton de fermeture
 }
 
 

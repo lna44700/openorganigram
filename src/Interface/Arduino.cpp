@@ -20,6 +20,7 @@
 //=====   En-Têtes Personnels   =====
 #include "Arduino.h"
 
+
 //=====   En-Têtes standards    =====
 #include <QDebug>
 #include <iostream>
@@ -284,6 +285,7 @@ void Arduino::Detecter()
     {
 
         //qDebug() << "Arduino Non Détecté" ;                        //Message indiquant que l'Arduino est non détecté
+        DonneesWeb->StoperTimer();
         this->Deconnecter() ;                                        //On lance la déconnexion
     }
 

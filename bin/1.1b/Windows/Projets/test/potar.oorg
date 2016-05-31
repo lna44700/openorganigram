@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Projet sNom="test">
+    <Resume nNbreModule="1" nNbreRoutine="1" nNbreInstructions="2"/>
+    <Config>[IDENTIFICATION]
+Id=000
+Nom=test
+Board=Arduino Mega 2560
+Version=27/05/2016 14:42:38
+
+[MODULE]
+m1=test
+
+[EASYCON2-BROCHE1]
+Nom=J-A10
+Broche_Analogique=10
+Broche_Numerique=64
+Type=AI
+Iocard=Potentiometre
+Commentaire=@Invalid()
+ARU=
+Module=test
+Action1_Nom=Lire la position du potentiom\xe8tre et la stocker dans S
+Action1_Code=A10#S
+Action1_Enable=true
+</Config>
+    <Module sNomModule="test">
+        <ActionArduino sNomAction="Lire la position du potentiomètre et la stocker dans S" sCommande="A10#S" bActive="true"/>
+        <Routine nId="0" sNom="Principale">
+            <Instruction Type="0" nId="0">
+                <nIdSuivant valeur="1"/>
+                <nIdPrec valeur="0"/>
+                <bDebut valeur="true"/>
+            </Instruction>
+            <Instruction Type="0" nId="1">
+                <nIdSuivant valeur="0"/>
+                <nIdPrec valeur="0"/>
+                <bDebut valeur="false"/>
+            </Instruction>
+        </Routine>
+    </Module>
+</Projet>

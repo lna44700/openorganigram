@@ -22,6 +22,7 @@ public:
     ~Donnees();
     QTimer* Get_pTimer();
     void    Timer();
+    void    StoperTimer();
     bool get_EtatTimer();
 
     QTimer*            pTimerRafraichissement;

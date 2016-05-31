@@ -387,6 +387,12 @@ void Donnees::Timer()
      this->pTimerWeb->start(700);
 }
 
+void Donnees::StoperTimer()
+{
+    this->pTimerWeb->stop();
+    delete this->pTimerWeb;
+}
+
 bool Donnees::get_EtatTimer()
 {
     return bEtatTimer;

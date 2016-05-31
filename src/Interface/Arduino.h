@@ -38,8 +38,7 @@ class Arduino : public QObject
                  int        LireCapteur(QString Commande);
                  QSemaphore          *Semaphore;
                  QextSerialPort *            PortSerie ;                             //L'objet représentant le port
-
-
+                 Donnees                    DonneesWeb;
 
     public slots :
                  bool       EnvoyerDonnees(QString sCommande, EmetteurCommande Emetteur) ;    //Slot public d'émission des données avec la commande et l'émetteur
